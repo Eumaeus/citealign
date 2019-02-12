@@ -24,3 +24,5 @@ links:
   - title:  Github repository
     url:  https://github.com/cite-architecture/citeobj
     external: true
+
+theme: jekyll-theme-leap-day
