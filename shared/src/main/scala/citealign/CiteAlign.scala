@@ -9,6 +9,10 @@ import edu.holycross.shot.ohco2._
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
+  /** A Class for creating a CiteAlignment class
+  *
+  * @constructor create a new [[CiteAlignment]] class 
+  */
 
 @JSExportAll  case class CiteAlignment(
   urn: Cite2Urn,

@@ -9,31 +9,25 @@ import edu.holycross.shot.citeobj._
 */
 class CiteAlignmentSpec extends FlatSpec {
 
+  "A CiteAlignment" should "build" in {
 
-  val cex = """#!citecollections
-URN#Description#Labelling property#Ordering property#License
-urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+  	val uVec:Vector[CtsUrn] = Vector(
+  		CtsUrn("urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.1-1.2"),
+  		CtsUrn("urn:cts:fufolio:pope.iliad.fu2019:1.1.1-1.1.2"),
+  		CtsUrn("urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.3-1.4"),
+  		CtsUrn("urn:cts:fufolio:pope.iliad.fu2019:1.1.3-1.1.4"),
+  		CtsUrn("urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4-1.5"),
+  		CtsUrn("urn:cts:fufolio:pope.iliad.fu2019:1.1.5-1.1.6")
+  	)
+  	val aUrn:Cite2Urn = Cite2Urn("urn:cite2:fufolio:iliadAlign:1")
+  	val label:String = "Iliad Test Alignment"
+  	val description:String = "An alignment of passages in Allen's edition of the Iliad to some translations."
+  	val ca:CiteAlignment = CiteAlignment(aUrn, label, description, uVec)
+  	assert(ca.passages.size == 6)
+  	
+  }
 
-#!citeproperties
-Property#Label#Type#Authority list
-urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
-urn:cite2:hmt:msA.v1.label:#Label#String#
-urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
-urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
-urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
-urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
-
-#!citedata
-siglum#sequence#urn#rv#label#codex
-msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
-msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA
-msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
-"""
-  val repo = CiteCollectionRepository(cex,"#",",")
-
-  "A CiteAlignment" should "build" in pending
-
-  it should "list alignments" in pending
+  it should "list alignment collections present in a CiteLibrary" in pending
 
   it should "list alignments filtered by Cite2Urn" in pending
 
@@ -47,6 +41,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
   it should "return a Corpus for a vector of alignments" in pending
 
+  it should "export a corpus and alignments as CEX" in pending
 
 
 }

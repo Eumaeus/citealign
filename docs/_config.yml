@@ -5,16 +5,16 @@
 permalink:        pretty
 
 # Setup
-title:            Citable object library
+title:            Cite-Align library
 tagline:          ''
 description:      ''
 
 
-baseurl: '/citeobj/'
+baseurl: '/citealign/'
 
 
 author:
-  name:           'Neel Smith'
+  name:           'Christopher Blackwell'
 
 
 links:
@@ -22,5 +22,5 @@ links:
     url:  https://cite-architecture.github.io/
     external: true
   - title:  Github repository
-    url:  https://github.com/cite-architecture/citeobj
+    url:  https://github.com/cite-architecture/citealign
     external: true
