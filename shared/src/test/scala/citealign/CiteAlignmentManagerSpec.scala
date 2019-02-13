@@ -40,6 +40,10 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     assert(cam.isValid == false)
   }
 
+  it should "fail to build gracefully if there is no implementing collection" in pending
+
+  it should "fail to build gracefully if the relations are not Cite2Urn <-> CtsUrn" in pending
+
   it should "return a vector of urns to collections that record alignments" in {
     val lib:CiteLibrary = loadLibrary()
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
@@ -89,13 +93,29 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     }
   }
 
-  it should "return all records of CITE Objects recording alignments" in pending
+  it should "return a Vector of CtsUrns of texts participating in an alignment defined by an object-level URN" in {
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:1")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val textsPresent:Vector[CtsUrn] = Vector(
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:"))
+    assert( cam.textsAligned(u).toSet == textsPresent.toSet)
+  }
 
-  it should "return records of a CITE Object recording alignments" in pending
-
-  it should "list texts participating in an alignment" in pending
+  it should "return a Vector of CtsUrns of texts participating in an alignment defined by a collection-level URN" in {
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val textsPresent:Vector[CtsUrn] = Vector(
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:"))
+    assert( cam.textsAligned(u).toSet == textsPresent.toSet )
+  }
 
   it should "list texts participating in a vector of alignments" in pending
+
+  it should "list texts participating in all recorded alignments" in pending
 
   it should "list alignments for a text" in pending
 
