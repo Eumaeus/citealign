@@ -58,9 +58,9 @@ import scala.scalajs.js.annotation._
 	val alignmentCollections:Vector[Cite2Urn] = collections
 
 	/** Returns all aligments as CiteObjects
-	*
+	* 
 	**/
-	val alignments:Vector[CiteObject] = {
+	def alignments():Vector[CiteObject] = {
 		collRepo match {
 			case Some(cr) => {
 				collections.map(c => {
@@ -71,7 +71,24 @@ import scala.scalajs.js.annotation._
 		}
 	} 
 
-	val alignmentUrns:Vector[Cite2Urn] = {
+	/** Returns all aligments as CiteObjects
+	* @param urn filter
+	**/
+	def alignments(u:Cite2Urn):Vector[CiteObject] = {
+		collRepo match {
+			case Some(cr) => {
+				collections.map(c => {
+					cr.objectsForCollection(c).filter(_.urn ~~ u)
+				}).flatten	
+			}
+			case None => Vector[CiteObject]()
+		}
+	} 
+
+	/** Returns Cite2Urns to all aligments
+	* 
+	**/
+	def alignmentUrns():Vector[Cite2Urn] = {
 		collRepo match {
 			case Some(cr) => {
 			 	alignments.map(_.urn)	
@@ -79,6 +96,18 @@ import scala.scalajs.js.annotation._
 			case None => Vector[Cite2Urn]()
 		}
 	} 
+
+	/** Returns Cite2Urns to all aligments
+	* @param urn Optional filter
+	**/
+	def alignmentUrns(urn:Cite2Urn):Vector[Cite2Urn] = {
+		collRepo match {
+			case Some(cr) => {
+			 	alignments(urn).map(_.urn)	
+			}
+			case None => Vector[Cite2Urn]()
+		}
+	}
 	
 
 }

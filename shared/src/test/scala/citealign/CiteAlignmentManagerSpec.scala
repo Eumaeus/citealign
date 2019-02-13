@@ -68,7 +68,26 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     }
   }
 
-  it should "list alignments filtered by Cite2Urn" in pending
+  it should "return a vector of all aligment-objects in a library filtered by Cite2Urn" in {
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val alignments:Vector[CiteObject] = cam.alignments(u)
+    assert (alignments.size == 2 )
+  }
+
+  it should "return a vector of URNs for all aligment-objects in a library filtered by Cite2Urn" in {
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val alignmentUrns:Vector[Cite2Urn] = cam.alignmentUrns(u)
+    assert (alignmentUrns.size == 2 )
+    alignmentUrns(0).asInstanceOf[Urn] match {
+      case CtsUrn(_) => assert (false)
+      case Cite2Urn(_) => assert (true)
+      case _ => assert(false)
+    }
+  }
 
   it should "return all records of CITE Objects recording alignments" in pending
 
