@@ -9,38 +9,155 @@ urn#urn:cite2:cex:fufolio.2018a:POxy2099
 license#CC Share Alike.  For details, see more info.
 
 
-// 
-// Datamodels block with DSE added
-// 
 #!datamodels
 Collection#Model#Label#Description
+urn:cite2:cite:verbs.v1:#urn:cite2:cite:datamodels.v1:commentarymodel#Commentary Model#URN comments on URN. See documentation at <https://github.com/cite-architecture/commentary>.
 urn:cite2:fufolio:papyri.2018a:#urn:cite2:cite:datamodels.v1:imagemodel#Citable image model#CITE architecture model of citable images.  See documentation at <http://cite-architecture.github.io/imagemodel/>.
 urn:cite2:fufolio:binaryimg.v1:#urn:cite2:cite:datamodels.v1:binaryimg#Citable image model#CITE architecture model of binary images manipulable by URN reference.  See <TBA>.
-// DSE identified below
 urn:cite2:fufolio:poxy2099_dse.v1:#urn:cite2:cite:datamodels.v1:dse#DSE model#Diplomatic Scholarly Edition (DSE) model.  See documentation at <https://github.com/cite-architecture/dse>.
-// CiteAlignment identified below
-urn:cite2:fufolio:iliadAlign.blackwell1:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
+//
+// We add an extensions_text datamodel. This points to a collection of extended_text_properties.
+//
+urn:cite2:fufolio:extended_text_properties.v1:#urn:cite2:cite:datamodels.v1:extensions_text#Extended Text Properies#Extended Text Property. See documentation at <https://github.com/cite-architecture/>.
 
 //
 // Collection Inventory:
-// with DSE collection added
+// Commentaries can be in the form of Collections as well as Texts
+// so we add a Commentary Collection here
 //
 #!citecollections
 URN#Description#Labelling property#Ordering property#License
-urn:cite2:fufolio:poxy2099.v1:#Papyrus POxy 2099#urn:cite2:fufolio:poxy2099.v1.label:#urn:cite2:fufolio:poxy2099.v1.sequence:#Public Domain
 urn:cite2:fufolio:papyri.2018a:#Images of Papyri: Furman Research#urn:cite2:fufolio:papyri.2018a.caption:##CC-attribution-share-alike
+urn:cite2:fufolio:poxy2099.v1:#Papyrus POxy 2099#urn:cite2:fufolio:poxy2099.v1.label:#urn:cite2:fufolio:poxy2099.v1.sequence:#Public Domain
+urn:cite2:fufolio:macan_hdt.2018demo:#Reginald Walter Macan's Commentary on Herodotus#urn:cite2:fufolio:macan_hdt.2018demo.label:#urn:cite2:fufolio:macan_hdt.2018demo.seq:#CC-BY-SA 3.0
 urn:cite2:cite:datamodels.v1:#CITE data models#urn:cite2:cite:datamodels.v1.label:##Public domain
 urn:cite2:fufolio:binaryimg.v1:#Collections of binary images#urn:cite2:fufolio:binaryimg.v1.label:##Public domain
-
-//
-// Collection of DSE Records
-//
 urn:cite2:fufolio:poxy2099_dse.v1:#DSE model of HMT editions#urn:cite2:fufolio:poxy2099_dse.v1.label:#urn:cite2:fufolio:poxy2099_dse.v1.seq:#CC-attribution-share-alike
+urn:cite2:cite:verbs.v1:#Collection of verbal relations#urn:cite2:cite:verbs.v1.label:##Public Domain
+urn:cite2:fufolio:hdtPlaces.pleiades:#Geographic places mentioned in Herodotus (Pleiades IDs)#urn:cite2:fufolio:hdtPlaces.pleiades.label:##Creative-Commons-attribution-share-alike
+urn:cite2:fufolio:hdtPlaces.geojson:#Geographic places mentioned in Herodotus (GeoJson Data)#urn:cite2:fufolio:hdtPlaces.geojson.label:##Creative-Commons-attribution-share-alike
+urn:cite2:fufolio:hdtPlaces.mixed:#Geographic places mentioned in Herodotus (mixed data)#urn:cite2:fufolio:hdtPlaces.mixed.label:##CC-BY-SA
+urn:cite2:fufolio:macan_hdt.mdDemo:#Reginald Walter Macan's Commentary on Herodotus#urn:cite2:fufolio:macan_hdt.mdDemo.label:#urn:cite2:fufolio:macan_hdt.mdDemo.seq:#CC-BY-SA 3.0
+urn:cite2:fufolio:macan_hdt.teiDemo:#Reginald Walter Macan's Commentary on Herodotus#urn:cite2:fufolio:macan_hdt.teiDemo.label:#urn:cite2:fufolio:macan_hdt.teiDemo.seq:#CC-BY-SA 3.0
+//
+// This is a collection of extended text properties
+//
+urn:cite2:fufolio:extended_text_properties.v1:#Extended Text Properties#urn:cite2:fufolio:extended_text_properties.v1.label:##CC-BY-SA
 
 
+
+// 
+// Properties for the extended_text_properties extension
+// In addition to the (standard) URN and label, there are:
+// a propertyurn, identifying the property of type "string", and
+// its type, an enumerated list of supported extensions.
+// (a different collection could define any other set of extension types.)
 //
-// Properties for the DSE Collection
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:extended_text_properties.v1.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:extended_text_properties.v1.label:#Label#String#
+urn:cite2:fufolio:extended_text_properties.v1.propertyurn:#Property URN#Cite2Urn#
+urn:cite2:fufolio:extended_text_properties.v1.extendedtype:#Extended Text Type#String#geojson,pleiadesuri,latlong,markdown,teixml
+
 //
+// Records for the extended_text_properties collection.
+// Note that we can identify properties at the versioned-collection-level _or_
+// at the individual object level.
+//
+#!citedata
+urn#label#propertyurn#extendedtype
+urn:cite2:fufolio:extended_text_properties.v1:hdt_pleiadesPlaces#Places in Herodotus Identified by Pleiades URI#urn:cite2:fufolio:hdtPlaces.pleiades.uri:#pleiadesuri
+urn:cite2:fufolio:extended_text_properties.v1:hdt_geojson#Places in Herodotus Identified by GeoJson#urn:cite2:fufolio:hdtPlaces.geojson.json:#geojson
+urn:cite2:fufolio:extended_text_properties.v1:oneOff_1#A single property in a versioned collection that is latitude and longitude#urn:cite2:fufolio:hdtPlaces.mixed.location:demo1#latlong
+urn:cite2:fufolio:extended_text_properties.v1:oneOff_2#A single property in a versioned collection that is a Pleiades URI#urn:cite2:fufolio:hdtPlaces.mixed.location:demo2#pleiadesuri
+urn:cite2:fufolio:extended_text_properties.v1:oneOff_3#A single property in a versioned collection that is GeoJson#urn:cite2:fufolio:hdtPlaces.mixed.location:demo3#geojson
+urn:cite2:fufolio:extended_text_properties.v1:macan_md#Macan's Commentary (Markdown)#urn:cite2:fufolio:macan_hdt.mdDemo.comment:#markdown
+urn:cite2:fufolio:extended_text_properties.v1:macan_tei#Macan's Commentary (Markdown)#urn:cite2:fufolio:macan_hdt.teiDemo.comment:#teixml
+
+
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:macan_hdt.teiDemo.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:macan_hdt.teiDemo.label:#Label#String#
+urn:cite2:fufolio:macan_hdt.teiDemo.seq:#Sequence#Number#
+urn:cite2:fufolio:macan_hdt.teiDemo.passage:#Passage#CtsUrn#
+urn:cite2:fufolio:macan_hdt.teiDemo.comment:#Comment#String#
+
+// Collection with a TEI-XML property
+#!citedata
+urn#label#seq#passage#comment
+urn:cite2:fufolio:macan_hdt.teiDemo:1000#8.22 Θεμιστοκλέης#1000#urn:cts:greekLit:tlg0016.tlg001.grc:8.22#<p> <lemma lang="greek" targOrder="U" from="ROOT" to="DITTO">Θεμιστοκλέης</lemma> here puts into operation the <foreign lang="greek">παλάμη</foreign> announced in c. 19 <foreign rend="ital">supra.</foreign> The employment of <lemma lang="greek" targOrder="U" from="ROOT" to="DITTO">ἐπιλεξάμενος</lemma> followed by <lemma lang="greek" targOrder="U" from="ROOT" to="DITTO">ἐπελέξαντο</lemma> in a different sense (<foreign lang="greek">ἐπιλέγεσθαι</foreign> <foreign rend="ital">eligere</foreign> 6. 73, 7. 10, etc., <foreign rend="ital">legere</foreign> c. 136 <foreign rend="ital">infra,</foreign> etc.) is not quite happy: an ‘unconscious iteration.’ </p>
+urn:cite2:fufolio:macan_hdt.teiDemo:1001#8.22 ἐπορεύετο περὶ τὰ πότιμα ὕδατα#1001#urn:cts:greekLit:tlg0016.tlg001.grc:8.22#<p> <lemma lang="greek" targOrder="U" from="ROOT" to="DITTO">ἐπορεύετο περὶ τὰ πότιμα ὕδατα</lemma> : he would, of course, have to land in order to do this: what time of day was it? The battle had begun at mid-day, or somewhat later, c. 15 <foreign rend="ital">supra;</foreign> the hour at which it ended has not been specified; but it had been a long and heavy engagement, in which half the Athenian vessels had been damaged (c. <pb n="386"/> 18 <foreign rend="ital">supra</foreign> ): then, according to Hdt., a council was held—the account of which is obscure. Then, the news of the disaster at Thermopylai is brought by Abronichos, and retreat becomes at once inevitable; but Themistokles now proceeds to carry out his projected <foreign lang="greek">παλάμη</foreign> . How many the springs, or fountains, to which the device was applied Hdt. does not say. </p>
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:macan_hdt.mdDemo.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:macan_hdt.mdDemo.label:#Label#String#
+urn:cite2:fufolio:macan_hdt.mdDemo.seq:#Sequence#Number#
+urn:cite2:fufolio:macan_hdt.mdDemo.passage:#Passage#CtsUrn#
+urn:cite2:fufolio:macan_hdt.mdDemo.comment:#Comment#String#
+
+// Collection with a Markdown property
+#!citedata
+urn#label#seq#passage#comment
+urn:cite2:fufolio:macan_hdt.mdDemo:1000#8.22 Θεμιστοκλέης#1000#urn:cts:greekLit:tlg0016.tlg001.grc:8.22#Θεμιστοκλέης here puts into operation the παλάμη announced in c. 19 *supra*. The employment of ἐπιλεξάμενος followed by ἐπελέξαντο in a different sense (ἐπιλέγεσθαι *eligere* 6. 73, 7. 10, etc., *legere* c. 136 *infra*, etc.) is not quite happy: an ‘unconscious iteration.’ [original source](http://www.perseus.tufts.edu/hopper/xmlchunk?doc=Perseus%3Atext%3A1999.04.0038%3Abook%3D8%3Achapter%3D22)
+urn:cite2:fufolio:macan_hdt.mdDemo:1001#8.22 ἐπορεύετο περὶ τὰ πότιμα ὕδατα#1001#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἐπορεύετο περὶ τὰ πότιμα ὕδατα: he would, of course, have to land in order to do this: what time of day was it? The battle had begun at mid-day, or somewhat later, c. 15 *supra*; the hour at which it ended has not been specified; but it had been a long and heavy engagement, in which half the Athenian vessels had been damaged (c. 18 *supra*): then, according to Hdt., a council was held—the account of which is obscure. Then, the news of the disaster at Thermopylai is brought by Abronichos, and retreat becomes at once inevitable; but Themistokles now proceeds to carry out his projected παλάμη. How many the springs, or fountains, to which the device was applied Hdt. does not say. [original source](http://www.perseus.tufts.edu/hopper/xmlchunk?doc=Perseus%3Atext%3A1999.04.0038%3Abook%3D8%3Achapter%3D22)
+urn:cite2:fufolio:macan_hdt.mdDemo:1002#8.22 ἐντάμνων ἐν τοῖσι λίθοισι γράμματα.#1002#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἐντάμνων ἐν τοῖσι λίθοισι γράμματα. We are to understand that these inscriptions were incised (and coloured?) in the living rocks, or in some cases in the stones (marble) with which the springs, or cisterns, were fenced and builded. These inscriptions were read by the Ionians on the very next day; cp c. 23 *infra*: were they ever read by any other mortals thereafter? How many times the inscription was reproduced by Themistokles Hdt. does not specify, but he gives the *ipsissima verba*, which ‘cut the record,’ for argument and rhetoric in inscriptions, a veritable ‘sermon in stones’; had Hdt. copied the same? Did ‘Ionians’ remember and report them at home? Is the aneedote an Attic invention? The appeal reads in any case more like a letter or an oral address than like a hastily cut inscription, and that in duplicate. There was no need to cut these inseriptions; they might as well have been simply written or painted up. [original source](http://www.perseus.tufts.edu/hopper/xmlchunk?doc=Perseus%3Atext%3A1999.04.0038%3Abook%3D8%3Achapter%3D22)
+
+// Geographic collections
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:hdtPlaces.pleiades.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:hdtPlaces.pleiades.label:#Label#String#
+urn:cite2:fufolio:hdtPlaces.pleiades.uri:#Pleiades URI#String#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:hdtPlaces.geojson.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:hdtPlaces.geojson.label:#Label#String#
+urn:cite2:fufolio:hdtPlaces.geojson.json:#GeoJson#String#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:hdtPlaces.mixed.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:hdtPlaces.mixed.label:#Label#String#
+urn:cite2:fufolio:hdtPlaces.mixed.location:#Location Data#String#
+
+#!citedata
+urn#label#uri
+urn:cite2:fufolio:hdtPlaces.pleiades:demo1#Artemision#https://pleiades.stoa.org/places/540667
+urn:cite2:fufolio:hdtPlaces.pleiades:demo2#Histiaia#https://pleiades.stoa.org/places/540988
+
+#!citedata
+urn#label#json
+urn:cite2:fufolio:hdtPlaces.geojson:demo1#Artemision#{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {}, "geometry": {"type": "Point", "coordinates": [23.223037719726562, 39.01691636788523 ] } } ] }
+urn:cite2:fufolio:hdtPlaces.geojson:demo2#Histiaia#{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {}, "geometry": {"type": "Point", "coordinates": [23.0987548828125, 38.94659331893374 ] } } ] }
+urn:cite2:fufolio:hdtPlaces.geojson:demo3#Ellopia#{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {}, "geometry": {"type": "Polygon", "coordinates": [[[23.070602416992188, 38.93537787875442 ], [23.100128173828125, 38.91988697357693 ], [23.13858032226562, 38.894773840440934 ], [23.163986206054688, 38.897980266995226 ], [23.1536865234375, 38.914544497799476 ], [23.1646728515625, 38.92522904714054 ], [23.20587158203125, 38.92416066460569 ], [23.199691772460938, 38.93324140329966 ], [23.162612915039062, 38.94392313694612 ], [23.172225952148438, 38.95940879245423 ], [23.174285888671875, 38.97809387052251 ], [23.191452026367188, 38.98129653184322 ], [23.181838989257812, 39.00157668934555 ], [23.155746459960938, 39.00904686141452 ], [23.128280639648438, 39.006912607032085 ], [23.110427856445312, 38.99410572845627 ], [23.09051513671875, 38.98022899416542 ], [23.070602416992188, 38.93537787875442 ] ] ] } } ] }
+
+
+#!citedata
+urn#label#location
+urn:cite2:fufolio:hdtPlaces.mixed:demo1#Artemision#39.0140455, 23.2213755
+urn:cite2:fufolio:hdtPlaces.mixed:demo2#Histiaia#https://pleiades.stoa.org/places/540988
+urn:cite2:fufolio:hdtPlaces.mixed:demo3#Ellopia#{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {}, "geometry": {"type": "Polygon", "coordinates": [[[23.070602416992188, 38.93537787875442 ], [23.100128173828125, 38.91988697357693 ], [23.13858032226562, 38.894773840440934 ], [23.163986206054688, 38.897980266995226 ], [23.1536865234375, 38.914544497799476 ], [23.1646728515625, 38.92522904714054 ], [23.20587158203125, 38.92416066460569 ], [23.199691772460938, 38.93324140329966 ], [23.162612915039062, 38.94392313694612 ], [23.172225952148438, 38.95940879245423 ], [23.174285888671875, 38.97809387052251 ], [23.191452026367188, 38.98129653184322 ], [23.181838989257812, 39.00157668934555 ], [23.155746459960938, 39.00904686141452 ], [23.128280639648438, 39.006912607032085 ], [23.110427856445312, 38.99410572845627 ], [23.09051513671875, 38.98022899416542 ], [23.070602416992188, 38.93537787875442 ] ] ] } } ] }
+
+
+
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:cite:verbs.v1.urn:#URN#Cite2Urn#
+urn:cite2:cite:verbs.v1.label:#label#String#
+urn:cite2:cite:verbs.v1.description:#description#String#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:papyri.2018a.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:papyri.2018a.caption:#Caption#String#
+urn:cite2:fufolio:papyri.2018a.rights:#Rights#String#
+
 #!citeproperties
 Property#Label#Type#Authority list
 urn:cite2:fufolio:poxy2099_dse.v1.urn:#DSE record#Cite2Urn#
@@ -50,34 +167,11 @@ urn:cite2:fufolio:poxy2099_dse.v1.passage:#Text passage#CtsUrn#
 urn:cite2:fufolio:poxy2099_dse.v1.imageroi:#Image region of interest#Cite2Urn#
 urn:cite2:fufolio:poxy2099_dse.v1.surface:#Artifact surface#Cite2Urn#
 
-
-//
-// The DSE data itself: citable graphs of surface+text+image
-//
-#!citedata
-seq#urn#label#passage#imageroi#surface
-1#urn:cite2:fufolio:poxy2099_dse.v1:82368#DSE record for Hdt. 8.23.68 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.68)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.68#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.2283,0.3957,0.2131,0.04936#urn:cite2:fufolio:poxy2099.v1:1
-2#urn:cite2:fufolio:poxy2099_dse.v1:82369#DSE record for Hdt. 8.23.69 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.69)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.69#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.4477,0.4068,0.2251,0.05617#urn:cite2:fufolio:poxy2099.v1:1
-3#urn:cite2:fufolio:poxy2099_dse.v1:82370#DSE record for Hdt. 8.23.71 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.70)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.6560,0.4043,0.06784,0.04000#urn:cite2:fufolio:poxy2099.v1:1
-4#urn:cite2:fufolio:poxy2099_dse.v1:82371a#DSE record for Hdt. 8.23.72a (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.6616,0.4230,0.06784,0.04000#urn:cite2:fufolio:poxy2099.v1:1
-5#urn:cite2:fufolio:poxy2099_dse.v1:82371b#DSE record for Hdt. 8.23.72b (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.2314,0.4570,0.09816,0.04681#urn:cite2:fufolio:poxy2099.v1:1
-5#urn:cite2:fufolio:poxy2099_dse.v1:82372#DSE record for Hdt. 8.23.73 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.73#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.3344,0.4681,0.2370,0.05617#urn:cite2:fufolio:poxy2099.v1:1
-
 #!citeproperties
 Property#Label#Type#Authority list
 urn:cite2:cite:datamodels.v1.urn:#Data model#Cite2Urn#
 urn:cite2:cite:datamodels.v1.label:#Label#String#
 urn:cite2:cite:datamodels.v1.description:#Description#String#
-
-
-//
-// We add the DSE model to the embedded documentation
-//
-#!citedata
-urn#label#description
-urn:cite2:cite:datamodels.v1:binaryimg#Binary image model#Model of binary images manipulable by URN reference.  See <TBA>.
-urn:cite2:cite:datamodels.v1:imagemodel#Citable images#Model of citable images from the CITE Architecture.  See <http://cite-architecture.github.io/imagemodel/>.
-urn:cite2:cite:datamodels.v1:dse#DSE model#Diplomatic Scholarly Edition (DSE) model.  See documentation at <https://github.com/cite-architecture/dse>.
 
 #!citeproperties
 Property#Label#Type#Authority list
@@ -89,23 +183,6 @@ urn:cite2:fufolio:binaryimg.v1.path:#Path on Server#String#
 urn:cite2:fufolio:binaryimg.v1.url:#Service URN Base#String#
 urn:cite2:fufolio:binaryimg.v1.rights:#Rights#String#
 
-#!citedata
-urn#label#collection#protocol#path#url#rights
-urn:cite2:fufolio:binaryimg.v1:poxy2099_amphoreusIIF#Binary data for images of papyri: Furman University. IIIF Files at the University of Houson.#urn:cite2:fufolio:papyri.2018a:#iiifApi#/project/homer/pyramidal/deepzoom/fufolio/papyri/2018a/#http://www.homermultitext.org/iipsrv?#Creative Commons Attribution Share-Alike.
-urn:cite2:fufolio:binaryimg.v1:poxy2099_iipDeepZoom#Binary data for images of the Venetus A manuscript. IIIF Files at the University of Houson. (must add .tif.dzi)#urn:cite2:fufolio:papyri.2018a:#iipDeepZoom#/project/homer/pyramidal/deepzoom/fufolio/papyri/2018a/#http://www.homermultitext.org/iipsrv?DeepZoom=#Creative Commons Attribution Share-Alike.
-urn:cite2:fufolio:binaryimg.v1:poxy2099_localDeepZoom#Binary data for images of the Venetus A manuscript. DeepZoom files#urn:cite2:fufolio:papyri.2018a:#localDeepZoom#/fufolio/papyri/2018a#image_archive#Creative Commons Attribution Share-Alike.
-urn:cite2:fufolio:binaryimg.v1:poxy2099_localJPG#Binary data for images of the Venetus A manuscript. DeepZoom files#urn:cite2:fufolio:papyri.2018a:#JPG#/fufolio/papyri/2018a/#image_archive#Creative Commons Attribution Share-Alike.
-
-#!citeproperties
-Property#Label#Type#Authority list
-urn:cite2:fufolio:papyri.2018a.urn:#URN#Cite2Urn#
-urn:cite2:fufolio:papyri.2018a.caption:#Caption#String#
-urn:cite2:fufolio:papyri.2018a.rights:#Rights#String#
-
-#!citedata
-urn#caption#rights
-urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01#P.Oxy 2099. A fragment of Herodotus 8 (2nd Century CE).#Public Domain. See https://commons.wikimedia.org/wiki/File:POxy_v0017_n2099_a_01_hires.jpg.
-
 #!citeproperties
 Property#Label#Type#Authority list
 urn:cite2:fufolio:poxy2099.v1.sequence:#Page sequence#Number#
@@ -115,21 +192,51 @@ urn:cite2:fufolio:poxy2099.v1.label:#Label#String#
 urn:cite2:fufolio:poxy2099.v1.defaultimg:#Default image#Cite2Urn#
 
 #!citedata
+urn#label#description
+urn:cite2:cite:verbs.v1:commentsOn#comments on#subject[Urn] comments on object[Urn]
+urn:cite2:cite:verbs.v1:illustrates#illustrates#subject[Urn] comments on object[Urn]
+urn:cite2:cite:verbs.v1:hasOnIt#has on it#subject[Urn] comments on object[Urn]
+
+#!citedata
+urn#label#collection#protocol#path#url#rights
+urn:cite2:fufolio:binaryimg.v1:poxy2099_amphoreusIIF#Binary data for images of papyri: Furman University. IIIF Files at the University of Houson.#urn:cite2:fufolio:papyri.2018a:#iiifApi#/project/homer/pyramidal/deepzoom/fufolio/papyri/2018a/#http://www.homermultitext.org/iipsrv?#Creative Commons Attribution Share-Alike.
+urn:cite2:fufolio:binaryimg.v1:poxy2099_iipDeepZoom#Binary data for images of the Venetus A manuscript. IIIF Files at the University of Houson. (must add .tif.dzi)#urn:cite2:fufolio:papyri.2018a:#iipDeepZoom#/project/homer/pyramidal/deepzoom/fufolio/papyri/2018a/#http://www.homermultitext.org/iipsrv?DeepZoom=#Creative Commons Attribution Share-Alike.
+urn:cite2:fufolio:binaryimg.v1:poxy2099_localDeepZoom#Binary data for images of the Venetus A manuscript. DeepZoom files#urn:cite2:fufolio:papyri.2018a:#localDeepZoom#/fufolio/papyri/2018a#image_archive#Creative Commons Attribution Share-Alike.
+urn:cite2:fufolio:binaryimg.v1:poxy2099_localJPG#Binary data for images of the Venetus A manuscript. DeepZoom files#urn:cite2:fufolio:papyri.2018a:#JPG#/fufolio/papyri/2018a/#image_archive#Creative Commons Attribution Share-Alike.
+
+#!citedata
+urn#label#description
+urn:cite2:cite:datamodels.v1:binaryimg#Binary image model#Model of binary images manipulable by URN reference.  See <TBA>.
+urn:cite2:cite:datamodels.v1:imagemodel#Citable images#Model of citable images from the CITE Architecture.  See <http://cite-architecture.github.io/imagemodel/>.
+urn:cite2:cite:datamodels.v1:dse#DSE model#Diplomatic Scholarly Edition (DSE) model.  See documentation at <https://github.com/cite-architecture/dse>.
+urn:cite2:cite:datamodels.v1:commentarymodel#Commentary model#A citable text or object comments on a citable text or object.  See documentation at <https://github.com/cite-architecture/dse>.
+urn:cite2:cite:datamodels.v1:extensions_text#Extended Text Properties#Extended Text Properties. See dcoumentation at <https://github.com/cite-architecture/extended_text_properties>.
+
+#!citedata
+urn#caption#rights
+urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01#P.Oxy 2099. A fragment of Herodotus 8 (2nd Century CE).#Public Domain. See https://commons.wikimedia.org/wiki/File:POxy_v0017_n2099_a_01_hires.jpg.
+
+#!citedata
 sequence#urn#rv#label#defaultimg
 0#urn:cite2:fufolio:poxy2099.v1:1#recto#P.Oxy 2099#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01
+
+#!citedata
+seq#urn#label#passage#imageroi#surface
+1#urn:cite2:fufolio:poxy2099_dse.v1:82368#DSE record for Hdt. 8.23.68 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.68)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.68#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.2283,0.3957,0.2131,0.04936#urn:cite2:fufolio:poxy2099.v1:1
+2#urn:cite2:fufolio:poxy2099_dse.v1:82369#DSE record for Hdt. 8.23.69 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.69)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.69#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.4477,0.4068,0.2251,0.05617#urn:cite2:fufolio:poxy2099.v1:1
+3#urn:cite2:fufolio:poxy2099_dse.v1:82370#DSE record for Hdt. 8.23.71 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.70)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.6560,0.4043,0.06784,0.04000#urn:cite2:fufolio:poxy2099.v1:1
+4#urn:cite2:fufolio:poxy2099_dse.v1:82371a#DSE record for Hdt. 8.23.72a (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.6616,0.4230,0.06784,0.04000#urn:cite2:fufolio:poxy2099.v1:1
+5#urn:cite2:fufolio:poxy2099_dse.v1:82371b#DSE record for Hdt. 8.23.72b (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.2314,0.4570,0.09816,0.04681#urn:cite2:fufolio:poxy2099.v1:1
+5#urn:cite2:fufolio:poxy2099_dse.v1:82372#DSE record for Hdt. 8.23.73 (urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72)#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.73#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.3344,0.4681,0.2370,0.05617#urn:cite2:fufolio:poxy2099.v1:1
+
 
 #!ctscatalog
 urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online#lang
 urn:cts:greekLit:tlg0016.tlg001.grc:#book/section#Herodotus#Histories#Greek, Godley, ed.##true#grc
-urn:cts:greekLit:tlg0016.tlg001.eng:#book/section#Herodotus#Histories#English, trans. Godley##true#eng
 urn:cts:greekLit:tlg0016.tlg001.grc.tokens:#book/section/token#Herodotus#Histories#Greek, Godley, ed.#tokenized#true#grc
+urn:cts:greekLit:tlg0016.tlg001.eng:#book/section#Herodotus#Histories#English, trans. Godley##true#eng
 urn:cts:greekLit:tlg0016.tlg001.eng.tokens:#book/section/token#Herodotus#Histories#English, trans. Godley#tokenized, no punctuation#true#eng
 urn:cts:fufolio:howwells.commentary.perseus:#book/section/comment#W. W. How, J. Wells#A Commentary on Herodotus#Perseus Digital Library ed.##true#eng
-
-#!ctsdata
-urn:cts:fufolio:howwells.commentary.perseus:8.22.1#τὰ πότιμα ὕδατα: i. e. on the coast of Histiaeotis, to which the Persian fleet crossed next day (ch. 23). With this appeal (rhetorically worked up by Justin, ii. 12. 3) cf. the fears of Artabanus and Xerxes' reply (vii. 51-2). It was more successful in causing suspicion of the Ionians (ch. 90) than in securing actual desertion (ch. 85.)
-urn:cts:fufolio:howwells.commentary.perseus:8.23.1#σκιδναμένῳ: of rays of light; cf. Hom. Il. vii. 451, and especially xxiii. 227 κροκόπεπλος ὑπεὶρ ἅλα κίδναται ἠώς.
-urn:cts:fufolio:howwells.commentary.perseus:8.23.2#Ἐλλοπίης: the old name for the whole northern half of Euboea, of which the territory of Histiaea or Oreus (vii. 175. 2), comprising the northern coastland, formed a part.
 
 #!ctsdata
 urn:cts:greekLit:tlg0016.tlg001.grc:8.22#Ἀθηναίων δὲ νέας τὰς ἄριστα πλεούσας ἐπιλεξάμενος Θεμιστοκλέης ἐπορεύετο περὶ τὰ πότιμα ὕδατα, ἐντάμνων ἐν τοῖσι λίθοισι γράμματα, τὰ Ἴωνες ἐπελθόντες τῇ ὑστεραίῃ ἡμέρῃ ἐπὶ τὸ Ἀρτεμίσιον ἐπελέξαντο. Τὰ δὲ γράμματα τάδε ἔλεγε· "Ἄνδρες Ἴωνες, οὐ ποιέετε δίκαια ἐπὶ τοὺς πατέρας στρατευόμενοι καὶ τὴν Ἑλλάδα καταδουλούμενοι. Ἀλλὰ μάλιστα μὲν πρὸς ἡμέων γίνεσθε· εἰ δὲ ὑμῖν ἐστι τοῦτο μὴ δυνατὸν ποιῆσαι, ὑμεῖς δὲ ἔτι καὶ νῦν ἐκ τοῦ μέσου ἡμῖν ἕζεσθε καὶ αὐτοὶ καὶ τῶν Καρῶν δέεσθε τὰ αὐτὰ ὑμῖν ποιέειν· εἰ δὲ μηδέτερον τούτων οἷόν τε γίνεσθαι, ἀλλ᾽ ὑπ᾽ ἀναγκαίης μέζονος κατέζευχθε ἢ ὥστε ἀπίστασθαι. ὑμεῖς δὲ ἐν τῷ ἔργῳ, ἐπεὰν συμμίσγωμεν, ἐθελοκακέετε, μεμνημένοι ὅτι ἀπ᾽ ἡμέων γεγόνατε καὶ ὅτι ἀρχῆθεν ἡ ἔχθρη πρὸς τὸν βάρβαρον ἀπ᾽ ὑμέων ἡμῖν γέγονε." Θεμιστοκλέης δὲ ταῦτα ἔγραφε, δοκέειν ἐμοί, ἐπ᾽ ἀμφότερα νοέων, ἵνα ἢ λαθόντα τὰ γράμματα βασιλέα Ἴωνας ποιήσῃ μεταβαλεῖν καὶ γενέσθαι πρὸς ἑωυτῶν, ἢ ἐπείτε ἂν ἀνενειχθῇ καὶ διαβληθῇ πρὸς Ξέρξην, ἀπίστους ποιήσῃ τοὺς Ἴωνας καὶ τῶν ναυμαχιέων αὐτοὺς ἀπόσχῃ.
@@ -747,3 +854,92 @@ urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.23.206#land
 urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.23.207#of
 urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.23.208#Histaia
 
+#!ctsdata
+urn:cts:fufolio:howwells.commentary.perseus:8.22.1#τὰ πότιμα ὕδατα: i. e. on the coast of Histiaeotis, to which the Persian fleet crossed next day (ch. 23). With this appeal (rhetorically worked up by Justin, ii. 12. 3) cf. the fears of Artabanus and Xerxes' reply (vii. 51-2). It was more successful in causing suspicion of the Ionians (ch. 90) than in securing actual desertion (ch. 85.)
+urn:cts:fufolio:howwells.commentary.perseus:8.23.1#σκιδναμένῳ: of rays of light; cf. Hom. Il. vii. 451, and especially xxiii. 227 κροκόπεπλος ὑπεὶρ ἅλα κίδναται ἠώς.
+urn:cts:fufolio:howwells.commentary.perseus:8.23.2#Ἐλλοπίης: the old name for the whole northern half of Euboea, of which the territory of Histiaea or Oreus (vii. 175. 2), comprising the northern coastland, formed a part.
+
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:macan_hdt.2018demo.urn:#URN#Cite2Urn#
+urn:cite2:fufolio:macan_hdt.2018demo.label:#Label#String#
+urn:cite2:fufolio:macan_hdt.2018demo.seq:#Sequence#Number#
+urn:cite2:fufolio:macan_hdt.2018demo.passage:#Passage#CtsUrn#
+urn:cite2:fufolio:macan_hdt.2018demo.comment:#Comment#String#
+
+
+
+#!citedata
+urn#label#seq#passage#comment
+urn:cite2:fufolio:macan_hdt.2018demo:1000#8.22 Θεμιστοκλέης#1000#urn:cts:greekLit:tlg0016.tlg001.grc:8.22#Θεμιστοκλέης here puts into operation the παλάμη announced in c. 19 supra. The employment of ἐπιλεξάμενος followed by ἐπελέξαντο in a different sense (ἐπιλέγεσθαι eligere 6. 73, 7. 10, etc., legere c. 136 infra, etc.) is not quite happy: an ‘unconscious iteration.’ 
+urn:cite2:fufolio:macan_hdt.2018demo:1001#8.22 ἐπορεύετο περὶ τὰ πότιμα ὕδατα#1001#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἐπορεύετο περὶ τὰ πότιμα ὕδατα: he would, of course, have to land in order to do this: what time of day was it? The battle had begun at mid-day, or somewhat later, c. 15 supra; the hour at which it ended has not been specified; but it had been a long and heavy engagement, in which half the Athenian vessels had been damaged (c. 18 supra): then, according to Hdt., a council was held—the account of which is obscure. Then, the news of the disaster at Thermopylai is brought by Abronichos, and retreat becomes at once inevitable; but Themistokles now proceeds to carry out his projected παλάμη. How many the springs, or fountains, to which the device was applied Hdt. does not say.
+urn:cite2:fufolio:macan_hdt.2018demo:1002#8.22 ἐντάμνων ἐν τοῖσι λίθοισι γράμματα.#1002#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἐντάμνων ἐν τοῖσι λίθοισι γράμματα. We are to understand that these inscriptions were incised (and coloured?) in the living rocks, or in some cases in the stones (marble) with which the springs, or cisterns, were fenced and builded. These inscriptions were read by the Ionians on the very next day; cp c. 23 infra: were they ever read by any other mortals thereafter? How many times the inscription was reproduced by Themistokles Hdt. does not specify, but he gives the ipsissima verba, which ‘cut the record,’ for argument and rhetoric in inscriptions, a veritable ‘sermon in stones’; had Hdt. copied the same? Did ‘Ionians’ remember and report them at home? Is the aneedote an Attic invention? The appeal reads in any case more like a letter or an oral address than like a hastily cut inscription, and that in duplicate. There was no need to cut these inseriptions; they might as well have been simply written or painted up.
+urn:cite2:fufolio:macan_hdt.2018demo:1003#8.22 τὰ δὲ γράμματα τάδε ἔλεγε#1003#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# τὰ δὲ γράμματα τάδε ἔλεγε: a conclusive proof of the use of λέγειν, λόγοι, et sim. for seript. The order of the words τάδε ἔλεγε is unusual, but occurs also 2. 136 in a less abrupt form.
+urn:cite2:fufolio:macan_hdt.2018demo:1004#8.22 ἐπὶ τοὺς πατέρας#1004#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἐπὶ τοὺς πατέρας: cp. 7. 51, where the same point and the same moral are urged by Artabanos.
+urn:cite2:fufolio:macan_hdt.2018demo:1005#8.22 μάλιστα μὲν ... εἰ δὲ ... μή#1005#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# μάλιστα μὲν ... εἰ δὲ ... μή: perhaps the earliest instance of the employment of this rhetorieal formula; cp. Thuc. 1. 40. 4, Plato Rep. 590 D, etc.
+urn:cite2:fufolio:macan_hdt.2018demo:1006#8.22 ὑμεῖς δέ#1006#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ὑμεῖς δέ: a genuine δέ in apodosi; the construction is repeated immediately below; cp. 7. 50, and Index.
+urn:cite2:fufolio:macan_hdt.2018demo:1007#8.22 ἐκ τοῦ μέσου ἡμῖν ἕζεσθε#1007#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἐκ τοῦ μέσου ἡμῖν ἕζεσθε, ‘assume a neutral position’; cp. 4. 118 ὑμεῖς ὦν μηδενὶ τρόπῳ ἐκ τοῦ μέσου κατήμενοι περιίδητε ἡμέας διαφθαρέντας. Also 3. 83 and c. 73 infra. ἡμῖν dat. ethicus, ‘we pray you’—
+urn:cite2:fufolio:macan_hdt.2018demo:1008#8.22 τῶν Καρῶν δέεσθε#1008#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# τῶν Καρῶν δέεσθε: cp. c. 19 supra; and for δέεσθαι cc. 3, 4 supra.
+urn:cite2:fufolio:macan_hdt.2018demo:1009#8.22 εἰ δὲ μηδέτερον τούτων#1009#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# εἰ δὲ μηδέτερον τούτων: three courses are open to the Ionians, more or less consistent with their duty to their fathers: (i.) μάλιστα μέν, to desert the Persian and join the Greeks (πρὸς Ἑλλήνων γίνεσθαι); (ii.) εἰ δὲ μή, to leave the Persian and assume a neutral position (ἐκ τοῦ μέσου ἕζεσθαι, κατῆσθαι); (iii.) to play the Persian false in the hour of battle (ἐν τῷ ἔργῳ ἐθελοκακέειν).
+urn:cite2:fufolio:macan_hdt.2018demo:1010#8.22 μέζονος ... ἢ ὥστε ἀπίστασθαι#1010#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# μέζονος ... ἢ ὥστε ἀπίστασθαι. The conjunction ὥστε is not de rigueur in this construction of the infinitive after a comparative, but is certainly in place; cp. Madvig, G.S. 150 c.
+urn:cite2:fufolio:macan_hdt.2018demo:1011#8.22 ἀρχῆθεν ἡ ἔχθρη#1011#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἀρχῆθεν ἡ ἔχθρη: a parallel argument is addressed to the Athenians by the Spartans c. 142 infra. The reference here is, of course, to the Ionian revolt and the part taken by Athens therein; but, as Hdt. 5. 73. 96, 97 clearly shows, the casus belli between Athens and Persia was already in existence before Athens espoused the cause of the Ionians, and the participation in the Ionian revolt was the effect and not the cause of the Athenian enmity with Sardes and with Susa.
+urn:cite2:fufolio:macan_hdt.2018demo:1012#8.22 δοκέειν ἐμοί, ἐπ᾽ ἀμφότερα νοέων#1012#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# δοκέειν ἐμοί, ἐπ᾽ ἀμφότερα νοέων: was this very obvious design really a discovery of Hdt.'s, or was the doublemindedness of Themistokles other than commendable?
+urn:cite2:fufolio:macan_hdt.2018demo:1013#8.22 μεταβαλεῖν#1013#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# μεταβαλεῖν, intransitive; 7. 52.
+urn:cite2:fufolio:macan_hdt.2018demo:1014#8.22 καὶ διαβληθῇ#1014#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# καὶ διαβληθῇ: sc. τὰ γράμματα; a curious phrase, though the meaning of διαβάλλειν cannot be doubtful; cp. 5. 50, 97 etc. But the sentence is rather clumsy, τὰ γράμματα as the subject of ποιήσῃ and of ἀπόσχῃ being harsh.
+urn:cite2:fufolio:macan_hdt.2018demo:1015#8.22 ἀπίστους#1015#urn:cts:greekLit:tlg0016.tlg001.grc:8.22# ἀπίστους, passive; 9. 98.
+urn:cite2:fufolio:macan_hdt.2018demo:1016#8.23 αὐτίκα μετὰ ταῦτα#1016#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# αὐτίκα μετὰ ταῦτα: still at night?
+urn:cite2:fufolio:macan_hdt.2018demo:1017#8.23 πλοίῳ#1017#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# πλοίῳ: the size of this boat is not specified; was the man of Histiaia alone in it? And why is not his proper name given? The retreat is a δρησμός—is that the man's word, or Hdt.'s?
+urn:cite2:fufolio:macan_hdt.2018demo:1018#8.23 ὑπ᾽ ἀπιστίης#1018#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# ὑπ᾽ ἀπιστίης: the man evidently went to Aphetai; if the Persian admirals actually disbelieved his report, they can hardly have heard as yet of the capture of Thermopylai. εἶχον ἐν φυλακῇ, ‘kept under arrest.’
+urn:cite2:fufolio:macan_hdt.2018demo:1019#8.23 τούτων#1019#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# τούτων, masculine, of the men on the ships; cp. 7. 179. 4 supra. τὰ ἦν: the true state of the case, the facts.
+urn:cite2:fufolio:macan_hdt.2018demo:1020#8.23 ἅμα ἡλίῳ σκιδναμένῳ#1020#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# ἅμα ἡλίῳ σκιδναμένῳ: dawn of the fourth day (say Wednesday); the phrase is peculiar: σκίδναμαι (σκίδνημι), cp 7. 141 (σκιδναμένης Δημήτερος), here seems to refer to the dispersion of light, the diffusion of rays by the sun. Blakesley cps. Milton's “Morn sowing the earth with orient pearl.” Cp. also Aischyl. Pers. 502 “πρὶν σκεδασθῆναι θεοῦ Ἀκτῖνας”. Also Psalm 97. 11 (R. V. “Light is sown for the righteous”).
+urn:cite2:fufolio:macan_hdt.2018demo:1021#8.23 πᾶσα ἡ στρατιή#1021#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# πᾶσα ἡ στρατιή: sc. ἡ ναυτική.
+urn:cite2:fufolio:macan_hdt.2018demo:1022#8.23 ἁλής#1022#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# ἁλής, without stragglers, and without detaching any scouts, etc., en masse.
+urn:cite2:fufolio:macan_hdt.2018demo:1023#8.23 ἐπισχόντες ... μέχρι μέσου ἡμέρης#1023#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# ἐπισχόντες ... μέχρι μέσου ἡμέρης: the hour at which they had moved out to battle on the previous day (c. 15 supra, which also shows that μέσου here is neuter). The double omission of the article may be easily understood in a colloquialism. There is no eagerness to pursue the Greek fleet; cp. c. 10 supra. τὸ ἀπὸ τούτου appears to be temporal.
+urn:cite2:fufolio:macan_hdt.2018demo:1024#8.23 τὴν πόλιν ἔσχον#1024#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# τὴν πόλιν ἔσχον: cp. 7. 164 for the strong ἔχω. They seem to have had no resistance to encounter. Ἱστιαία (ἡ) suffered afterwards a worse fate from the Athenians in 446 B.C., Ἑστιαιᾶς δὲ ἐξοικίσαντες αὐτοὶ τὴν γῆν ἔσχον, Thuc. 1. 114. 3; cp. Hicks, Manual,2 p. 65, though there is no reference to that catastrophe here. It hardly seems likely that Histiaia was no more and its place taken by Oreos (the name which yet prevails) when Hdt. wrote this passage; in other words, the first draft of his history is appreciably older than the thirty years' truce; cp. Introduction, § 9.
+urn:cite2:fufolio:macan_hdt.2018demo:1025#8.23 τῆς Ἐλλοπίης μοίρης γῆς δὲ τῆς Ἱστιαιώτιδος#1025#urn:cts:greekLit:tlg0016.tlg001.grc:8.23# τῆς Ἐλλοπίης μοίρης γῆς δὲ τῆς Ἱστιαιώτιδος, commentators (so Rawlinson, Baehr) have misunderstood the relation of these terms, and made ἡ Ἐλλοπίη μοίρη a part of Histiaiotis; as Stein rightly points out, γῆς δέ is a “second closer definition,” according to a regnlar use of δέ, cp. 1. 114. The Persians did not over-run Euboia, but only Ellopia, or Hellopia, nor all Hellopia, but only Histiaiotis, nor yet quite all Histiaiotis, but only τὰς παραθαλασσίας κώμας—though not one of those they spared (πάσας). The Persians did not venture far from their ships. Hellopia is no doubt the land of the Ἕλλοπες, an interesting and surely primitive folk, in view of their congeners Δρύοπες, Δόλοπες, Κέκροπες (Κεκροπίδαι), Κύκλοπες (Κύκλωπες), Πέλοπες (Πελοπίδαι) and others like. Perhaps Ἕλλοπες is not far removed from Ἔλληνες itself; Strabo 445 gives Ἐλλοπία as a name for Euboia, ἀπὸ Ἔλλοπος τοῦ Ἴωνος. Elsewhere (328) he qnotes Philochoros as saying τὸν περὶ Δωδώνην τόπον, ὥσπερ τὴν Εὔβοιαν, Ἑλλοπίαν κληθῆναι (on the authority of Hesiod); and connects Ἑλλοί (Σελλοί） and Ἕλλοπες.
+
+#!relations
+urn:cts:fufolio:howwells.commentary.perseus:8.22.1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc:8.22
+urn:cts:fufolio:howwells.commentary.perseus:8.23.1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc:8.22
+urn:cts:fufolio:howwells.commentary.perseus:8.23.2#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc:8.22
+urn:cts:fufolio:howwells.commentary.perseus:8.22.1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.10
+urn:cts:fufolio:howwells.commentary.perseus:8.22.1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.11
+urn:cts:fufolio:howwells.commentary.perseus:8.22.1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.12
+urn:cts:fufolio:howwells.commentary.perseus:8.23.1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.51
+urn:cts:fufolio:howwells.commentary.perseus:8.23.2#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.88
+urn:cite2:fufolio:macan_hdt.2018demo:1000#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc:8.22
+urn:cite2:fufolio:macan_hdt.2018demo:1000#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.7
+urn:cite2:fufolio:macan_hdt.2018demo:1001#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc:8.22
+urn:cite2:fufolio:macan_hdt.2018demo:1001#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.9
+urn:cite2:fufolio:macan_hdt.2018demo:1001#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.10
+urn:cite2:fufolio:macan_hdt.2018demo:1001#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.11
+urn:cite2:fufolio:macan_hdt.2018demo:1001#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.12
+urn:cite2:fufolio:macan_hdt.2018demo:1002#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.14-8.22.18
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:hasOnIt#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.68
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:hasOnIt#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.69
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:hasOnIt#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:hasOnIt#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:hasOnIt#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:hasOnIt#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.73
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.68
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.69
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.71
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.72
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.23.73
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.2283,0.3957,0.2131,0.04936
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.4477,0.4068,0.2251,0.05617
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.6560,0.4043,0.06784,0.04000
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.6616,0.4230,0.06784,0.04000
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.2314,0.4570,0.09816,0.04681
+urn:cite2:fufolio:poxy2099.v1:1#urn:cite2:cite:verbs.v1:illustrates#urn:cite2:fufolio:papyri.2018a:POxy0017n2099a01@0.3344,0.4681,0.2370,0.05617
+// Un-comment the next two lines below to match a notional object to a notional citation
+urn:cite2:fufolio:hdtPlaces:demo1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001:8.22
+urn:cite2:fufolio:hdtPlaces:demo2#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001:8.23
+// Un-comment the line below to match a notional object to an exemplar-level citation
+urn:cite2:fufolio:hdtPlaces:demo1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.28
+urn:cite2:fufolio:hdtPlaces:demo1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.36
+// Un-comment the line below to match a versioned object to a version-level citation
+//urn:cite2:fufolio:hdtPlaces.geojson:demo1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.28
+//urn:cite2:fufolio:hdtPlaces.geojson:demo1#urn:cite2:cite:verbs.v1:commentsOn#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.36
