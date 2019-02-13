@@ -25,7 +25,7 @@ import scala.scalajs.js.annotation._
 	*			urn:cite2:cite:verbs.v1:aligns
 	*/
 
-	val dataModelUrn:Cite2Urn = Cite2Urn("urn:cite2:cite:datamodels.v1:alignment")
+	private val dataModelUrn:Cite2Urn = Cite2Urn("urn:cite2:cite:datamodels.v1:alignment")
 	val relationUrn:Cite2Urn = Cite2Urn("urn:cite2:cite:verbs.v1:aligns")
 	val textRepo:Option[TextRepository] = library.textRepository
 	val collRepo:Option[CiteCollectionRepository] = library.collectionRepository
@@ -51,5 +51,7 @@ import scala.scalajs.js.annotation._
 	if (hasCollection == false) isValid = false
 	if (hasAlignmentRelations == false) isValid = false
 
+
+	
 
 }

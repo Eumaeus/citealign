@@ -1,60 +1,3 @@
-package edu.furman.classics.citealign
-import org.scalatest.FlatSpec
-import edu.holycross.shot.cite._
-import edu.holycross.shot.scm._
-import edu.holycross.shot.citeobj._
-import scala.io.Source
-
-
-/**
-*/
-class CiteAlignmentManagerSpec extends FlatSpec {
-
-
-  def loadLibrary(fp:String = goodCex):CiteLibrary = {
-    val library = CiteLibrary(fp,"#",",")
-    library
-  }
-
-  def removeLinesFromCex(cex:String, lineNum:Int):String = {
-    val lines:Vector[(String,Int)] = cex.split("\n").zipWithIndex.toVector
-    val index:Int = lineNum - 1
-    lines.filter(_._2 != index).map(_._1).mkString("\n")
-  }
-
-  "A CiteAlignmentManager" should "build" in {
-    val lib:CiteLibrary = loadLibrary()
-    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
-    assert(cam.isValid)
-  }
-
-  it should "fail to buld gracefully if the datamodel is not defined in the library" in {
-    val badCex:String = removeLinesFromCex(goodCex,11)
-    val lib:CiteLibrary = loadLibrary(badCex)
-    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
-    assert(cam.isValid == false)
-  }
-
-  it should "include all records of the recording CITE Object" in pending
-
-  it should "list alignment collections present in a CiteLibrary" in pending
-
-  it should "list alignments filtered by Cite2Urn" in pending
-
-  it should "list texts participating in an alignment" in pending
-
-  it should "list texts participating in a vector of alignments" in pending
-
-  it should "list alignments for a text" in pending
-
-  it should "return a Vector[CtsUrn] for an alignment" in pending
-
-  it should "return a Corpus for a vector of alignments" in pending
-
-  it should "export a corpus and alignments as CEX" in pending
-
-
-  val goodCex:String = """
 #!cexversion
 3.0
 
@@ -246,7 +189,3 @@ urn:cts:fufolio:pope.iliad.fu2019:1.3.5#By these he begs; and lowly bending down
 urn:cts:fufolio:pope.iliad.fu2019:1.3.6#Extends the sceptre and the laurel crown
 urn:cts:fufolio:pope.iliad.fu2019:1.3.7#He sued to all, but chief implored for grace
 urn:cts:fufolio:pope.iliad.fu2019:1.3.8#The brother-kings, of Atreus' royal race
-
-"""
-
-}
