@@ -25,15 +25,16 @@ import scala.scalajs.js.annotation._
 	*			urn:cite2:cite:verbs.v1:aligns
 	*/
 
+	// Private values
 	private val dataModelUrn:Cite2Urn = Cite2Urn("urn:cite2:cite:datamodels.v1:alignment")
-	val relationUrn:Cite2Urn = Cite2Urn("urn:cite2:cite:verbs.v1:aligns")
-	val textRepo:Option[TextRepository] = library.textRepository
-	val collRepo:Option[CiteCollectionRepository] = library.collectionRepository
-	val dataModels:Option[Vector[DataModel]] = library.dataModels	
-	val relations:Option[CiteRelationSet] = library.relationSet
-	val collections:Vector[Cite2Urn] = library.collectionsForModel(Cite2Urn("urn:cite2:cite:datamodels.v1:alignment"))
-	val hasCollection:Boolean = collections.size > 0
-	val hasAlignmentRelations:Boolean = {
+	private val relationUrn:Cite2Urn = Cite2Urn("urn:cite2:cite:verbs.v1:aligns")
+	private val textRepo:Option[TextRepository] = library.textRepository
+	private val collRepo:Option[CiteCollectionRepository] = library.collectionRepository
+	private val dataModels:Option[Vector[DataModel]] = library.dataModels	
+	private val relations:Option[CiteRelationSet] = library.relationSet
+	private val collections:Vector[Cite2Urn] = library.collectionsForModel(Cite2Urn("urn:cite2:cite:datamodels.v1:alignment"))
+	private val hasCollection:Boolean = collections.size > 0
+	private val hasAlignmentRelations:Boolean = {
 		library.relationSet match {
 			case Some(rs) => {
 				rs.verbs.contains(relationUrn)
@@ -51,7 +52,33 @@ import scala.scalajs.js.annotation._
 	if (hasCollection == false) isValid = false
 	if (hasAlignmentRelations == false) isValid = false
 
+	/** Returns Collections that implement the Alignment Data Model
+	*
+	**/
+	val alignmentCollections:Vector[Cite2Urn] = collections
 
+	/** Returns all aligments as CiteObjects
+	*
+	**/
+	val alignments:Vector[CiteObject] = {
+		collRepo match {
+			case Some(cr) => {
+				collections.map(c => {
+					cr.objectsForCollection(c)
+				}).flatten	
+			}
+			case None => Vector[CiteObject]()
+		}
+	} 
+
+	val alignmentUrns:Vector[Cite2Urn] = {
+		collRepo match {
+			case Some(cr) => {
+			 	alignments.map(_.urn)	
+			}
+			case None => Vector[Cite2Urn]()
+		}
+	} 
 	
 
 }
