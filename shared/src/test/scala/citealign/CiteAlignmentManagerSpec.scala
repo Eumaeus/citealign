@@ -31,8 +31,8 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   def editLinesInCex(cex:String, lineNum:Int, replacement:String) = {
     val lines:Vector[(String,Int)] = cex.split("\n").zipWithIndex.toVector
     val index:Int = lineNum - 1
-    val before:Vector[(String,Int)] = lines.filter(l => l._2 < index)
-    val after:Vector[(String,Int)] = lines.filter(l => l._2 > index)
+    val before:Vector[String] = lines.filter(l => l._2 < index).map(_._1)
+    val after:Vector[String] = lines.filter(l => l._2 > index).map(_._1)
     val replaceVec:Vector[String] = Vector(replacement)
     val newCex = (before ++ replaceVec ++ after) .mkString("\n")
     newCex
@@ -47,6 +47,12 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     assert(cam.isValid)
   }
 
+  it should "have a working editLinesInCex function in the tests" in {
+    val goodStr = "aaa\nbbb\nccc"
+    val badStr = editLinesInCex(goodStr,2,"XXX")
+    assert( badStr == "aaa\nXXX\nccc")
+  }
+
   it should "fail to buld gracefully if the datamodel is not defined in the library" in {
     val badCex:String = removeLinesFromCex(goodCex,Vector(11, 12))
     val lib:CiteLibrary = loadLibrary(badCex)
@@ -56,7 +62,25 @@ class CiteAlignmentManagerSpec extends FlatSpec {
 
   it should "fail to build gracefully if there is no implementing collection" in pending
 
-  it should "fail to build gracefully if the relations are not Cite2Urn <-> CtsUrn" in pending
+  it should "fail to build gracefully if the subject of all relations is not a Cite2Urn" in {
+    val badLine:String = "urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4-1.5#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4-1.5"
+    val badCex:String = editLinesInCex(goodCex,63,badLine)
+    val lib:CiteLibrary = loadLibrary(badCex)
+    val thrown = intercept[Exception] {
+      val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    }
+    assert( thrown.getMessage.size > 0)
+  }
+
+  it should "fail to build gracefully if the object of all relations is not a CtsUrn" in {
+    val badLine:String = "urn:cite2:fufolio:iliadAlign.blackwell:5#urn:cite2:cite:verbs.v1:aligns#urn:cite2:fufolio:iliadAlign.blackwell:5"
+    val badCex:String = editLinesInCex(goodCex,63,badLine)
+    val lib:CiteLibrary = loadLibrary(badCex)
+    val thrown = intercept[Exception] {
+      val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    }
+    assert( thrown.getMessage.size > 0)
+  }
 
   it should "return a vector of urns to collections that record alignments" in {
     val lib:CiteLibrary = loadLibrary()

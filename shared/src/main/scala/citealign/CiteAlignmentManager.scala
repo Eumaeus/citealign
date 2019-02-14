@@ -52,6 +52,37 @@ import scala.scalajs.js.annotation._
 	if (hasCollection == false) isValid = false
 	if (hasAlignmentRelations == false) isValid = false
 
+	// Check that the relations are okay
+	if (isValid){
+		hasAlignmentRelations match {
+			case true => {
+				val alignmentRels:CiteRelationSet = relations.get.verb(relationUrn)
+				val badSubjects:Set[CiteTriple] = {
+					alignmentRels.relations.filter(ct => {
+						ct.urn1 match {
+							case Cite2Urn(_) => false 
+							case _ => true 
+						}
+					})
+				}
+				val badObjects:Set[CiteTriple] = {
+					alignmentRels.relations.filter(ct => {
+						ct.urn2 match {
+							case CtsUrn(_) => false 
+							case _ => true 
+						}
+					})
+				}
+				val badRelations = badSubjects ++ badObjects
+				if (badRelations.size > 0) {
+					isValid = false
+					throw new Exception(s"""Bad alignment relations: ${badRelations.mkString("\n\t")}""")
+				}
+			}	
+			case false => isValid = false
+		}
+	}
+
 	/** Returns Collections that implement the Alignment Data Model
 	*
 	**/
@@ -172,6 +203,10 @@ import scala.scalajs.js.annotation._
 			}
 		}
 	}	
+
+	def alignmentsForText(urns:Vector[CtsUrn]):Vector[CiteAlignment] = {
+		Vector[CiteAlignment]()
+	}
 
 
 }
