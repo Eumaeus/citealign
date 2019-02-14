@@ -136,6 +136,42 @@ import scala.scalajs.js.annotation._
 			}
 		}
 	}
-	
+
+	/** Returns CtsUrns representing all texts participating in
+	*   a Vector of alignment
+	* @param urns Vector[Cite2Urn] The Alignments (object- or collection-level )
+	**/
+	def textsAligned(urns:Vector[Cite2Urn]):Vector[CtsUrn] = {
+		if (isValid == false) {
+			Vector[CtsUrn]()
+		} else {
+			val aus:Vector[Cite2Urn] = alignmentUrns()
+			relations match {
+				case Some(rs) => {
+					urns.map(u => textsAligned(u)).flatten
+				}
+				case None => Vector[CtsUrn]()
+			}
+		}
+	}	
+
+	/** Returns CtsUrns representing all texts participating in
+	*   alignments recorded in the library
+	**/
+
+	def textsAligned():Vector[CtsUrn] = {
+		if (isValid == false) {
+			Vector[CtsUrn]()
+		} else {
+			val aus:Vector[Cite2Urn] = alignmentUrns()
+			relations match {
+				case Some(rs) => {
+					rs.relations.map(_.urn2.asInstanceOf[CtsUrn].dropPassage).toVector.distinct
+				}
+				case None => Vector[CtsUrn]()
+			}
+		}
+	}	
+
 
 }

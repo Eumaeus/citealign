@@ -10,6 +10,8 @@ import scala.io.Source
 */
 class CiteAlignmentManagerSpec extends FlatSpec {
 
+  // Utility methods so we don't have to have many
+  // different CEX strings in this test doc
 
   def loadLibrary(fp:String = goodCex):CiteLibrary = {
     val library = CiteLibrary(fp,"#",",")
@@ -20,12 +22,24 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     removeLinesFromCex(cex, Vector(lineNum))
   }
 
-
   def removeLinesFromCex(cex:String, lineNums:Vector[Int]):String = {
     val lines:Vector[(String,Int)] = cex.split("\n").zipWithIndex.toVector
     val indices:Vector[Int] = lineNums.map(_ - 1)
     lines.filter(l => (indices.contains(l._2) == false)).map(_._1).mkString("\n")
   }
+
+  def editLinesInCex(cex:String, lineNum:Int, replacement:String) = {
+    val lines:Vector[(String,Int)] = cex.split("\n").zipWithIndex.toVector
+    val index:Int = lineNum - 1
+    val before:Vector[(String,Int)] = lines.filter(l => l._2 < index)
+    val after:Vector[(String,Int)] = lines.filter(l => l._2 > index)
+    val replaceVec:Vector[String] = Vector(replacement)
+    val newCex = (before ++ replaceVec ++ after) .mkString("\n")
+    newCex
+  }
+
+
+  // Actual tests
 
   "A CiteAlignmentManager" should "build" in {
     val lib:CiteLibrary = loadLibrary()
@@ -49,8 +63,8 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
     val colls:Vector[Cite2Urn] = cam.alignmentCollections
     assert( colls.size == 2 )
-    assert( colls.contains( Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell1:")))
-    assert( colls.contains( Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:")))
+    assert( colls.contains( Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:")))
+    assert( colls.contains( Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:")))
   }
 
   it should "return a vector of all aligment-objects in a library" in {
@@ -73,7 +87,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   }
 
   it should "return a vector of all aligment-objects in a library filtered by Cite2Urn" in {
-    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:")
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:")
     val lib:CiteLibrary = loadLibrary()
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
     val alignments:Vector[CiteObject] = cam.alignments(u)
@@ -81,7 +95,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   }
 
   it should "return a vector of URNs for all aligment-objects in a library filtered by Cite2Urn" in {
-    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:")
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:")
     val lib:CiteLibrary = loadLibrary()
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
     val alignmentUrns:Vector[Cite2Urn] = cam.alignmentUrns(u)
@@ -94,7 +108,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   }
 
   it should "return a Vector of CtsUrns of texts participating in an alignment defined by an object-level URN" in {
-    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:1")
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1")
     val lib:CiteLibrary = loadLibrary()
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
     val textsPresent:Vector[CtsUrn] = Vector(
@@ -104,7 +118,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   }
 
   it should "return a Vector of CtsUrns of texts participating in an alignment defined by a collection-level URN" in {
-    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell1:")
+    val u:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:")
     val lib:CiteLibrary = loadLibrary()
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
     val textsPresent:Vector[CtsUrn] = Vector(
@@ -113,9 +127,31 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     assert( cam.textsAligned(u).toSet == textsPresent.toSet )
   }
 
-  it should "list texts participating in a vector of alignments" in pending
+  it should "list texts participating in a vector of alignments" in {
+    val u:Vector[Cite2Urn] = Vector(
+      Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1"),
+      Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:2"),
+    )
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val textsPresent:Vector[CtsUrn] = Vector(
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:"))
+    assert( cam.textsAligned(u).toSet == textsPresent.toSet )
 
-  it should "list texts participating in all recorded alignments" in pending
+  }
+
+  it should "list texts participating in all recorded alignments" in {
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val textsPresent:Vector[CtsUrn] = Vector(
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:"),
+      CtsUrn("urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:"),
+      CtsUrn("urn:cts:fufolio:pope.iliad.fu2019:")
+    )
+    assert( cam.textsAligned.toSet == textsPresent.toSet )
+  }
 
   it should "list alignments for a text" in pending
 
@@ -136,66 +172,66 @@ license#CC Share Alike.  For details, see more info.
 
 #!datamodels
 Collection#Model#Label#Description
-urn:cite2:fufolio:hdtAlign.blackwell1:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
-urn:cite2:fufolio:iliadAlign.blackwell1:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
+urn:cite2:fufolio:hdtAlign.blackwell:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
+urn:cite2:fufolio:iliadAlign.blackwell:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
 
 #!citecollections
 URN#Description#Labelling property#Ordering property#License
 urn:cite2:cite:datamodels.v1:#CITE data models#urn:cite2:cite:datamodels.v1.label:##Public domain
 urn:cite2:cite:verbs.v1:#Collection of verbal relations#urn:cite2:cite:verbs.v1.label:##Public Domain
 
-urn:cite2:fufolio:hdtAlign.blackwell1:#Translation alignments#urn:cite2:fufolio:hdtAlign.blackwell1.label:##Public Domain
+urn:cite2:fufolio:hdtAlign.blackwell:#Translation alignments#urn:cite2:fufolio:hdtAlign.blackwell.label:##Public Domain
 
-urn:cite2:fufolio:iliadAlign.blackwell1:#Translation alignments#urn:cite2:fufolio:iliadAlign.blackwell1.label:##Public Domain
-
-#!citeproperties
-Property#Label#Type#Authority list
-urn:cite2:fufolio:hdtAlign.blackwell1.urn:#Alignment Record#Cite2Urn#
-urn:cite2:fufolio:hdtAlign.blackwell1.label:#Label#String#
-urn:cite2:fufolio:hdtAlign.blackwell1.description:#Description#String#
-urn:cite2:fufolio:hdtAlign.blackwell1.editor:#Editor#String#
-urn:cite2:fufolio:hdtAlign.blackwell1.date:#Date#String#
+urn:cite2:fufolio:iliadAlign.blackwell:#Translation alignments#urn:cite2:fufolio:iliadAlign.blackwell.label:##Public Domain
 
 #!citeproperties
 Property#Label#Type#Authority list
-urn:cite2:fufolio:iliadAlign.blackwell1.urn:#Alignment Record#Cite2Urn#
-urn:cite2:fufolio:iliadAlign.blackwell1.label:#Label#String#
-urn:cite2:fufolio:iliadAlign.blackwell1.description:#Description#String#
-urn:cite2:fufolio:iliadAlign.blackwell1.editor:#Editor#String#
-urn:cite2:fufolio:iliadAlign.blackwell1.date:#Date#String#
+urn:cite2:fufolio:hdtAlign.blackwell.urn:#Alignment Record#Cite2Urn#
+urn:cite2:fufolio:hdtAlign.blackwell.label:#Label#String#
+urn:cite2:fufolio:hdtAlign.blackwell.description:#Description#String#
+urn:cite2:fufolio:hdtAlign.blackwell.editor:#Editor#String#
+urn:cite2:fufolio:hdtAlign.blackwell.date:#Date#String#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:iliadAlign.blackwell.urn:#Alignment Record#Cite2Urn#
+urn:cite2:fufolio:iliadAlign.blackwell.label:#Label#String#
+urn:cite2:fufolio:iliadAlign.blackwell.description:#Description#String#
+urn:cite2:fufolio:iliadAlign.blackwell.editor:#Editor#String#
+urn:cite2:fufolio:iliadAlign.blackwell.date:#Date#String#
 
 #!citedata
 urn#label#description#editor#date
-urn:cite2:fufolio:hdtAlign.blackwell1:1#Hdt. 1#Herodotus Alignment 1#cwb#2/12/2019
-urn:cite2:fufolio:hdtAlign.blackwell1:2#Hdt. 2#Herodotus Alignment 2#cwb#2/12/2019
+urn:cite2:fufolio:hdtAlign.blackwell:1#Hdt. 1#Herodotus Alignment 1#cwb#2/12/2019
+urn:cite2:fufolio:hdtAlign.blackwell:2#Hdt. 2#Herodotus Alignment 2#cwb#2/12/2019
 
 #!citedata
 urn#label#description#editor#date
-urn:cite2:fufolio:iliadAlign.blackwell1:3#Iliad 1#Iliad Alignment 1#cwb#2/12/2019
-urn:cite2:fufolio:iliadAlign.blackwell1:4#Iliad 2#Iliad Alignment 2#cwb#2/12/2019
-urn:cite2:fufolio:iliadAlign.blackwell1:5#Iliad 3#Iliad Alignment 3#cwb#2/12/2019
-urn:cite2:fufolio:iliadAlign.blackwell1:6#Iliad 4#Iliad Alignment 4#cwb#2/12/2019
+urn:cite2:fufolio:iliadAlign.blackwell:3#Iliad 1#Iliad Alignment 1#cwb#2/12/2019
+urn:cite2:fufolio:iliadAlign.blackwell:4#Iliad 2#Iliad Alignment 2#cwb#2/12/2019
+urn:cite2:fufolio:iliadAlign.blackwell:5#Iliad 3#Iliad Alignment 3#cwb#2/12/2019
+urn:cite2:fufolio:iliadAlign.blackwell:6#Iliad 4#Iliad Alignment 4#cwb#2/12/2019
 
 #!relations
 // Hdt.
-urn:cite2:fufolio:hdtAlign.blackwell1:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0-8.22.6
-urn:cite2:fufolio:hdtAlign.blackwell1:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1
-urn:cite2:fufolio:hdtAlign.blackwell1:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3-8.22.12
-urn:cite2:fufolio:hdtAlign.blackwell1:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6-8.22.7
-urn:cite2:fufolio:hdtAlign.blackwell1:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.0
-urn:cite2:fufolio:hdtAlign.blackwell1:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.2
-urn:cite2:fufolio:hdtAlign.blackwell1:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12
+urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0-8.22.6
+urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1
+urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3-8.22.12
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6-8.22.7
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.0
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.2
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12
 // Iliad greek - pope
-urn:cite2:fufolio:iliadAlign.blackwell1:3#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.1-1.2
-urn:cite2:fufolio:iliadAlign.blackwell1:3#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.1-1.1.2
-urn:cite2:fufolio:iliadAlign.blackwell1:4#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.3-1.4
-urn:cite2:fufolio:iliadAlign.blackwell1:4#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.3-1.1.4
-urn:cite2:fufolio:iliadAlign.blackwell1:5#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4-1.5
-urn:cite2:fufolio:iliadAlign.blackwell1:5#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.5-1.1.6
-urn:cite2:fufolio:iliadAlign.blackwell1:5#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.8
-urn:cite2:fufolio:iliadAlign.blackwell1:6#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.6-1.10
-urn:cite2:fufolio:iliadAlign.blackwell1:6#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.7
-urn:cite2:fufolio:iliadAlign.blackwell1:6#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.2.1-1.2.4
+urn:cite2:fufolio:iliadAlign.blackwell:3#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.1-1.2
+urn:cite2:fufolio:iliadAlign.blackwell:3#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.1-1.1.2
+urn:cite2:fufolio:iliadAlign.blackwell:4#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.3-1.4
+urn:cite2:fufolio:iliadAlign.blackwell:4#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.3-1.1.4
+urn:cite2:fufolio:iliadAlign.blackwell:5#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4-1.5
+urn:cite2:fufolio:iliadAlign.blackwell:5#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.5-1.1.6
+urn:cite2:fufolio:iliadAlign.blackwell:5#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.8
+urn:cite2:fufolio:iliadAlign.blackwell:6#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.6-1.10
+urn:cite2:fufolio:iliadAlign.blackwell:6#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.7
+urn:cite2:fufolio:iliadAlign.blackwell:6#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.2.1-1.2.4
 
 #!citeproperties
 Property#Label#Type#Authority list
