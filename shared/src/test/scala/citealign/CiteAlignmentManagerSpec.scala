@@ -191,7 +191,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
       CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1"),
       CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3-8.22.12")
     )
-    val alignment:Vector[CiteAlignment] = cam.getAlignment(alignmentUrn)
+    val alignment:Vector[CiteAlignment] = cam.getAlignments(alignmentUrn)
     assert( alignment.size == 1)
     assert( alignment.head.urn == alignmentUrn)
     assert( alignment.head.passages == passages)
@@ -329,17 +329,49 @@ class CiteAlignmentManagerSpec extends FlatSpec {
       Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:5"),
       Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:6")
     )
-    assert( cam.alignmentsForText(textUrn).toSet == alignmentsPresent.toSet )
     val alignments:Set[CiteAlignment] = cam.alignmentsForText(textUrn)
     val aligmentUrns:Set[Cite2Urn] = alignments.map(_.urn)
     assert( aligmentUrns == alignmentsPresent )
   }
 
-  it should "list alignments for a passage" in pending
+  it should "list alignments for a passage" in {
+    val passage:CtsUrn = CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
 
-  it should "list alignments for a range" in pending
+    val expectedSet = cam.getAlignments(Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1")).toSet
+    val als:Set[CiteAlignment] = cam.alignmentsForText(passage)
+    assert( als == expectedSet)
 
-  it should "list alignments for a vector of CtsUrns" in pending
+  }
+
+  it should "list alignments for a range" in {
+    val passage:CtsUrn = CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.0-8.22.10")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val expectedColls:Vector[Cite2Urn] = Vector(
+      Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1"),Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:2")
+    )
+    val expectedSet = cam.getAlignments(expectedColls).toSet
+    val als:Set[CiteAlignment] = cam.alignmentsForText(passage)
+    assert( als == expectedSet)
+  }
+
+
+  it should "list alignments for a vector of CtsUrns" in {
+    val passages:Vector[CtsUrn] = Vector(
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10"),
+      CtsUrn("urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4")
+    )
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val expectedColls:Vector[Cite2Urn] = Vector(
+      Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1"),Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:4"),Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:5")
+    )
+    val expectedSet = cam.getAlignments(expectedColls).toSet
+    val als:Set[CiteAlignment] = cam.alignmentsForText(passages)
+    assert( als == expectedSet)
+  }
 
   it should "return a Vector[CtsUrn] for an alignment" in pending
 

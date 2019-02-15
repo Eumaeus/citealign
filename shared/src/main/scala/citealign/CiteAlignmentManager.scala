@@ -204,11 +204,22 @@ import scala.scalajs.js.annotation._
 		}
 	}	
 
+	/** Given a Vector[Cite2Urn], return a Vector of CiteAlignment objects
+	* @param urn Cite2Urn
+	**/
+
+	def getAlignments(urns:Vector[Cite2Urn]):Vector[CiteAlignment] = {
+		//println(s"getAlignments with ${urns}")
+		urns.map( u => {
+			getAlignments(u)
+		}).flatten
+	}
+
 	/** Given a Cite2Urn, return a Vector of CiteAlignment objects
 	* @param urn Cite2Urn
 	**/
 
-	def getAlignment(urn:Cite2Urn):Vector[CiteAlignment] = {
+	def getAlignments(urn:Cite2Urn):Vector[CiteAlignment] = {
 		if (isValid) {
 			relations match {
 				case Some(rs) => {
@@ -283,7 +294,6 @@ import scala.scalajs.js.annotation._
 							var thisIndex:Int = thisWorkUrns.find(_._1 == wu).get._2
 							(wu, thisIndex)
 						})
-						//println(s""" \n\ncompressReff sortyBy\n-------${theseUrns.sortBy(_._2).mkString("\n")}\n-------""")
 						theseUrns.sortBy(_._2)
 					})
 
@@ -327,19 +337,46 @@ import scala.scalajs.js.annotation._
 		sortPassages(passageSet)
 	}
 
-	/** Returns Cite2Urns representing alignments for given texts, ranges, 
-	*   or passages
+
+	/** Returns Cite2Urns representing alignments for a passage
 	*   @param urns Vector[CtsUrn]
 	**/
 	def alignmentsForText(urns:Vector[CtsUrn]):Set[CiteAlignment] = {
-		Set[CiteAlignment]()
+		urns.map(u => {
+			alignmentsForText(u).toVector
+		}).flatten.toSet
 	}
 
-	/** Returns Cite2Urns representing alignments for a single text or passage
+	/** Returns Cite2Urns representing alignments for a passage
 	*   @param urn CtsUrn
 	**/
 	def alignmentsForText(urn:CtsUrn):Set[CiteAlignment] = {
-		Set[CiteAlignment]()
+		if (isValid) {
+			relations match {
+				case Some(rs) => {
+					val expandedParamUrn:Vector[CtsUrn] = textRepo.get.corpus.validReff(urn)
+					val treatExpandedUrns:Vector[Cite2Urn] = expandedParamUrn.map( eu => {
+						val workUrn:CtsUrn = eu.dropPassage
+						val matches:CiteRelationSet = rs ~~ workUrn
+						val alignmentUrns:Vector[Cite2Urn] = matches.relations.filter( m => {
+							val textU:CtsUrn = m.urn2.asInstanceOf[CtsUrn]				
+							if (textU.isRange) {
+								val textUU:Vector[CtsUrn] = textRepo.get.corpus.validReff(textU)				
+								( textUU.contains(eu))
+							} else {
+								(textU == eu)
+							}
+						}).map(_.urn1.asInstanceOf[Cite2Urn]).toVector
+						alignmentUrns
+					}).flatten
+					//println(s"""\n\nvec: ${treatExpandedUrns.mkString("\n")}\n""")
+					val alignmentVec:Vector[CiteAlignment] = getAlignments(treatExpandedUrns)
+					alignmentVec.toSet
+				}	
+				case None => Set[CiteAlignment]()
+			}
+		} else { Set[CiteAlignment]() }	
+
 	}
 
 	/** Utility function: Given a Vector[Int] group all continuous runs
