@@ -21,8 +21,7 @@ class CiteAlignmentSpec extends FlatSpec {
   	)
   	val aUrn:Cite2Urn = Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell1:1")
   	val label:String = "Iliad Test Alignment"
-  	val description:String = "An alignment of passages in Allen's edition of the Iliad to some translations."
-  	val ca:CiteAlignment = CiteAlignment(aUrn, label, description, uVec)
+  	val ca:CiteAlignment = CiteAlignment(aUrn, label, uVec)
   	assert(ca.passages.size == 6)
   	
   }

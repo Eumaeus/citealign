@@ -17,7 +17,6 @@ import scala.scalajs.js.annotation._
 @JSExportAll  case class CiteAlignment(
   urn: Cite2Urn,
   label: String,
-  description: String,
   passages:Vector[CtsUrn]
   ) {
 

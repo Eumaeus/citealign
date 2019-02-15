@@ -61,8 +61,13 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   }
 
   it should "fail to build gracefully if there is no implementing collection" in pending
+  it should "fail to build gracefully if there is no relationSet" in pending
+  it should "fail to build gracefully if there is no textRepository" in pending
+  it should "fail to build gracefully if there is are no alignmentRelations" in pending
+  it should "throw an exception if any alignment-object URN is not present in a collection" in pending
+  it should "throw an exception if any aligned text URN is not present in a collection" in pending
 
-  it should "fail to build gracefully if the subject of all relations is not a Cite2Urn" in {
+  it should "throw an exception if the subject of all relations is not a Cite2Urn" in {
     val badLine:String = "urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4-1.5#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4-1.5"
     val badCex:String = editLinesInCex(goodCex,63,badLine)
     val lib:CiteLibrary = loadLibrary(badCex)
@@ -72,7 +77,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     assert( thrown.getMessage.size > 0)
   }
 
-  it should "fail to build gracefully if the object of all relations is not a CtsUrn" in {
+  it should "throw an exception if the object of all relations is not a CtsUrn" in {
     val badLine:String = "urn:cite2:fufolio:iliadAlign.blackwell:5#urn:cite2:cite:verbs.v1:aligns#urn:cite2:fufolio:iliadAlign.blackwell:5"
     val badCex:String = editLinesInCex(goodCex,63,badLine)
     val lib:CiteLibrary = loadLibrary(badCex)
@@ -177,7 +182,132 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     assert( cam.textsAligned.toSet == textsPresent.toSet )
   }
 
-  it should "list alignments for a text" in pending
+  it should "construct a CiteAlignment object from a Cite2Urn" in {
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val alignmentUrn:Cite2Urn = Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1")
+    val passages:Vector[CtsUrn] = Vector(
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0-8.22.6"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3-8.22.12")
+    )
+    val alignment:Vector[CiteAlignment] = cam.getAlignment(alignmentUrn)
+    assert( alignment.size == 1)
+    assert( alignment.head.urn == alignmentUrn)
+    assert( alignment.head.passages == passages)
+  }
+
+  it should "reorder a Set[CtsUrn] into a Vector[CtsUrn] according to document order from a corpus" in {
+      val lib:CiteLibrary = loadLibrary()
+      val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+      val shuffle:Set[CtsUrn] = Set(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.7-8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2-8.22.5")
+      )
+      val sorted:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.4"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.5"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.7"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.8"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.9"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12")
+      )
+      assert( cam.sortPassages(shuffle) == sorted)
+  }
+
+  it should "reorder a Vector[CtsUrn] into a Vector[CtsUrn] according to document order from a corpus" in {
+      val lib:CiteLibrary = loadLibrary()
+      val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+      val shuffle:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.7-8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2-8.22.5")
+      )
+      val sorted:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.4"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.5"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.7"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.8"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.9"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12")
+      )
+      assert( cam.sortPassages(shuffle) == sorted)
+  }
+
+  it should "compress a Vector[CtsUrn] into ranges where possible" in {
+      val lib:CiteLibrary = loadLibrary()
+      val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+      val shuffle:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.29"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.8"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.9")
+      )
+      val expected:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1-8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.8-8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.29")
+      )
+      val sorted:Vector[CtsUrn] = cam.sortPassages(shuffle)
+      val compressed:Vector[CtsUrn] = cam.compressReff(sorted)
+      assert(expected == compressed)
+
+  }
+
+  it should "list alignments for a text" in {
+    val textUrn:CtsUrn = CtsUrn("urn:cts:fufolio:pope.iliad.fu2019:")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val alignmentsPresent:Set[Cite2Urn] = Set(
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:3"),
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:4"),
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:5"),
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:6")
+    )
+    val alignments:Set[CiteAlignment] = cam.alignmentsForText(textUrn)
+    val aligmentUrns:Set[Cite2Urn] = alignments.map(_.urn)
+    assert( aligmentUrns == alignmentsPresent )
+  }
+
+  it should "list alignments for a notional text" in {
+    val textUrn:CtsUrn = CtsUrn("urn:cts:fufolio:pope.iliad:")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val alignmentsPresent:Set[Cite2Urn] = Set(
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:3"),
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:4"),
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:5"),
+      Cite2Urn("urn:cite2:fufolio:iliadAlign.blackwell:6")
+    )
+    assert( cam.alignmentsForText(textUrn).toSet == alignmentsPresent.toSet )
+    val alignments:Set[CiteAlignment] = cam.alignmentsForText(textUrn)
+    val aligmentUrns:Set[Cite2Urn] = alignments.map(_.urn)
+    assert( aligmentUrns == alignmentsPresent )
+  }
+
+  it should "list alignments for a passage" in pending
+
+  it should "list alignments for a range" in pending
+
+  it should "list alignments for a vector of CtsUrns" in pending
 
   it should "return a Vector[CtsUrn] for an alignment" in pending
 
@@ -185,8 +315,27 @@ class CiteAlignmentManagerSpec extends FlatSpec {
 
   it should "export a corpus and alignments as CEX" in pending
 
+  it should "have a utility function for grouping sequences of integer, as lists" in {
+    val textUrn:CtsUrn = CtsUrn("urn:cts:fufolio:pope.iliad:")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val tokens:List[Int] = List(1,2,3,10,20,21,22,30,40,41,42,50)
+    val desired:List[List[Int]] = List(List(1, 2, 3), List(10), List(20, 21, 22), List(30), List(40, 41, 42), List(50))
+    val answer:List[List[Int]] = cam.groupSequences(tokens)
+    assert(answer == desired)
+  } 
 
-  val goodCex:String = """#!cexversion
+  it should "have a utility function for grouping sequences of integer, as vectors" in {
+    val textUrn:CtsUrn = CtsUrn("urn:cts:fufolio:pope.iliad:")
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val tokens:Vector[Int] = Vector(1,2,3,10,20,21,22,30,40,41,42,50)
+    val desired:Vector[Vector[Int]] = Vector(Vector(1, 2, 3), Vector(10), Vector(20, 21, 22), Vector(30), Vector(40, 41, 42), Vector(50))
+    val answer:Vector[Vector[Int]] = cam.groupSequences(tokens)
+    assert(answer == desired)
+  } 
+
+val goodCex:String = """#!cexversion
 3.0
 
 #!citelibrary
@@ -239,8 +388,8 @@ urn:cite2:fufolio:iliadAlign.blackwell:6#Iliad 4#Iliad Alignment 4#cwb#2/12/2019
 #!relations
 // Hdt.
 urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0-8.22.6
-urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1
 urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3-8.22.12
+urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1
 urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6-8.22.7
 urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.0
 urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.2

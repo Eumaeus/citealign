@@ -204,8 +204,166 @@ import scala.scalajs.js.annotation._
 		}
 	}	
 
-	def alignmentsForText(urns:Vector[CtsUrn]):Vector[CiteAlignment] = {
-		Vector[CiteAlignment]()
+	/** Given a Cite2Urn, return a Vector of CiteAlignment objects
+	* @param urn Cite2Urn
+	**/
+
+	def getAlignment(urn:Cite2Urn):Vector[CiteAlignment] = {
+		if (isValid) {
+			relations match {
+				case Some(rs) => {
+					val alignmentObjects:Vector[CiteObject] = alignments(urn)		
+					val alignmentVec:Vector[CiteAlignment] = {
+						alignmentObjects.map( ao => {
+							val urn:Cite2Urn = ao.urn
+							val label:String = ao.label
+							val passages:Vector[CtsUrn] = {
+								val passageSet:Set[CtsUrn] = rs.urn1Match(urn).relations.map(_.urn2.asInstanceOf[CtsUrn])
+								Vector[CtsUrn]()
+							}
+							CiteAlignment(urn, label, passages)
+						})
+					}
+					Vector[CiteAlignment]()
+				}
+				case None => Vector[CiteAlignment]()
+			}
+		} else { 
+			Vector[CiteAlignment]()
+		}
+	}
+
+	/** Given a Set[CtsUrn] return a Vector[CtsUrn] sorted by document
+	*   order according to the Corpus in the TextRepository
+	*   @param passageSet Set[CtsUrn]
+	**/
+	def sortPassages(passageSet:Set[CtsUrn]):Vector[CtsUrn] = {
+		if (isValid) {
+			textRepo match {
+				case Some(tr) => {
+					val trc = tr.corpus
+					val pv:Vector[CtsUrn] = passageSet.toVector.map(u => trc.validReff(u)).flatten
+					val pm:Vector[(CtsUrn,Vector[CtsUrn])] = pv.groupBy(_.dropPassage).toVector
+					val workVec:Vector[CtsUrn] = pm.map(work => {
+						val thisWorkUrns:Vector[(CtsUrn, Int)] = trc.urns.filter(_.dropPassage == work._1).zipWithIndex
+						val theseUrns:Vector[(CtsUrn, Int)] = work._2.map( wu => {
+							var thisIndex:Int = thisWorkUrns.find(_._1 == wu).get._2
+							(wu, thisIndex)
+						})
+						theseUrns.sortBy(_._2).map(_._1)
+					}).flatten
+					workVec
+				}
+				case None => {
+					Vector[CtsUrn]()
+				}
+			}	
+		} else {
+			Vector[CtsUrn]()
+		}
+	}
+
+	/** Given a Vector[CtsUrn] compress it so that any sequences of URNs that
+	*   can be expressed as ranges are expressed as ranges.
+	* @param urns Vector[CtsUrn]
+	**/
+	def compressReff(urns:Vector[CtsUrn]):Vector[CtsUrn] = {
+		if (isValid) {
+			textRepo match {
+				case Some(tr) => {
+					val trc = tr.corpus
+					// expand any ranges
+					val pv:Vector[CtsUrn] = urns.toVector.map(u => trc.validReff(u)).flatten
+					// group by text
+					val pm:Vector[(CtsUrn,Vector[CtsUrn])] = pv.groupBy(_.dropPassage).toVector
+					val workVec:Vector[(CtsUrn,Int)] = pm.map(work => {
+						val thisWorkUrns:Vector[(CtsUrn, Int)] = trc.urns.filter(_.dropPassage == work._1).zipWithIndex
+						val theseUrns:Vector[(CtsUrn, Int)] = work._2.map( wu => {
+							var thisIndex:Int = thisWorkUrns.find(_._1 == wu).get._2
+							(wu, thisIndex)
+						})
+						theseUrns.sortBy(_._2)
+					}).flatten
+
+					//Pull out the indices and "compress" them:
+					val indices:Vector[Int] = workVec.map(_._2)
+					val indicesGrouped:Vector[Vector[Int]] = groupSequences(indices)
+					val returnVec:Vector[CtsUrn] = indicesGrouped.map( i => {
+							if (i.size == 1 ) {
+								val u:CtsUrn = workVec.find(_._2 == i.head ).get._1
+								u
+							} else {
+								val startUrn:CtsUrn = workVec.find(_._2 == i.head ).get._1
+								val endUrn:CtsUrn = workVec.find(_._2 == i.last ).get._1
+								val endPsg:String = endUrn.passageComponent
+								val u:CtsUrn = CtsUrn(s"${startUrn}-${endPsg}")
+								u
+							}
+					})
+					returnVec
+				}	
+				case None => {
+					Vector[CtsUrn]()
+				}
+			}	
+		} else {
+			Vector[CtsUrn]()
+		}
+	}
+
+
+
+	/** Given a Vector[CtsUrn] return a Vector[CtsUrn] sorted by document
+	*   order according to the Corpus in the TextRepository
+	*   @param passageVec Vector[CtsUrn]
+	**/
+	def sortPassages(passageVec:Vector[CtsUrn]):Vector[CtsUrn] = {
+		val passageSet:Set[CtsUrn] = passageVec.toSet
+		sortPassages(passageSet)
+	}
+
+	/** Returns Cite2Urns representing alignments for given texts, ranges, 
+	*   or passages
+	*   @param urns Vector[CtsUrn]
+	**/
+	def alignmentsForText(urns:Vector[CtsUrn]):Set[CiteAlignment] = {
+		Set[CiteAlignment]()
+	}
+
+	/** Returns Cite2Urns representing alignments for a single text or passage
+	*   @param urn CtsUrn
+	**/
+	def alignmentsForText(urn:CtsUrn):Set[CiteAlignment] = {
+		Set[CiteAlignment]()
+	}
+
+	/** Utility function: Given a Vector[Int] group all continuous runs
+	* @param indices Vector[Int]
+	**/
+	def groupSequences(indices:Vector[Int]):Vector[Vector[Int]] = {
+		val iAsLists:List[Int] = indices.toList
+		val answer:List[List[Int]] = groupSequences(iAsLists)
+		answer.map(_.toVector).toVector
+	}
+
+	/** Utility function: Given a List[Int] group all continuous runs
+	* @param indices List[Int]
+	**/
+	def groupSequences(indices:List[Int]):List[List[Int]] = {
+		    val (acc, last) = indices
+		        .foldLeft ((List[List[Int]](), List[Int]())) ((a,b) => 
+		            if ( a._2.size == 0  )  {
+		                (a._1 :+ a._2, List(b)) 
+		            }
+		            else if ( (a._2.last + 1) != b  ) {
+		                (a._1 :+ a._2, List(b))
+		            }
+		            else {
+		                (a._1, a._2 :+ b)
+		            }
+		        )
+		    val answerAsLists:List[List[Int]] = (acc :+ last).tail	
+		    answerAsLists
 	}
 
 
