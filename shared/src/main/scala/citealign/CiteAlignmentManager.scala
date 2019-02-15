@@ -219,12 +219,13 @@ import scala.scalajs.js.annotation._
 							val label:String = ao.label
 							val passages:Vector[CtsUrn] = {
 								val passageSet:Set[CtsUrn] = rs.urn1Match(urn).relations.map(_.urn2.asInstanceOf[CtsUrn])
-								Vector[CtsUrn]()
+								val passageVec:Vector[CtsUrn] = compressReff(sortPassages(passageSet))
+								passageVec
 							}
 							CiteAlignment(urn, label, passages)
 						})
 					}
-					Vector[CiteAlignment]()
+					alignmentVec
 				}
 				case None => Vector[CiteAlignment]()
 			}
@@ -276,30 +277,34 @@ import scala.scalajs.js.annotation._
 					val pv:Vector[CtsUrn] = urns.toVector.map(u => trc.validReff(u)).flatten
 					// group by text
 					val pm:Vector[(CtsUrn,Vector[CtsUrn])] = pv.groupBy(_.dropPassage).toVector
-					val workVec:Vector[(CtsUrn,Int)] = pm.map(work => {
+					val workVec:Vector[Vector[(CtsUrn,Int)]] = pm.map(work => {
 						val thisWorkUrns:Vector[(CtsUrn, Int)] = trc.urns.filter(_.dropPassage == work._1).zipWithIndex
 						val theseUrns:Vector[(CtsUrn, Int)] = work._2.map( wu => {
 							var thisIndex:Int = thisWorkUrns.find(_._1 == wu).get._2
 							(wu, thisIndex)
 						})
+						//println(s""" \n\ncompressReff sortyBy\n-------${theseUrns.sortBy(_._2).mkString("\n")}\n-------""")
 						theseUrns.sortBy(_._2)
-					}).flatten
+					})
 
-					//Pull out the indices and "compress" them:
-					val indices:Vector[Int] = workVec.map(_._2)
-					val indicesGrouped:Vector[Vector[Int]] = groupSequences(indices)
-					val returnVec:Vector[CtsUrn] = indicesGrouped.map( i => {
+					val returnVec:Vector[CtsUrn] = workVec.map(wv => {
+						val indices:Vector[Int] = wv.map(_._2)
+						val indicesGrouped:Vector[Vector[Int]] = groupSequences(indices)
+						val returnDeepVec:Vector[CtsUrn] = indicesGrouped.map( i => {
 							if (i.size == 1 ) {
-								val u:CtsUrn = workVec.find(_._2 == i.head ).get._1
+								val u:CtsUrn = wv.find(_._2 == i.head ).get._1
 								u
 							} else {
-								val startUrn:CtsUrn = workVec.find(_._2 == i.head ).get._1
-								val endUrn:CtsUrn = workVec.find(_._2 == i.last ).get._1
+								val startUrn:CtsUrn = wv.find(_._2 == i.head ).get._1
+								val endUrn:CtsUrn = wv.find(_._2 == i.last ).get._1
 								val endPsg:String = endUrn.passageComponent
 								val u:CtsUrn = CtsUrn(s"${startUrn}-${endPsg}")
 								u
-							}
-					})
+							}						
+						})
+						returnDeepVec
+					}).flatten
+
 					returnVec
 				}	
 				case None => {

@@ -268,7 +268,39 @@ class CiteAlignmentManagerSpec extends FlatSpec {
       )
       val sorted:Vector[CtsUrn] = cam.sortPassages(shuffle)
       val compressed:Vector[CtsUrn] = cam.compressReff(sorted)
+      //println(s"""\n\n-----\ncompressed\n----\n${compressed.mkString("\n")}\n\n----""")
       assert(expected == compressed)
+
+  }
+
+  it should "compress a Vector[CtsUrn] into ranges where possible even when there are URNs of different works" in {
+      val lib:CiteLibrary = loadLibrary()
+      val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+      val shuffle:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.2"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10"),
+      )
+      val expected1:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1-8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1-8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10")
+      )
+      val expected2:Vector[CtsUrn] = Vector(
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1-8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1-8.22.3"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.10")
+      )
+      val sorted:Vector[CtsUrn] = cam.sortPassages(shuffle)
+      val compressed:Vector[CtsUrn] = cam.compressReff(sorted)
+      assert( (expected1 == compressed) | (expected2 == compressed))
 
   }
 
