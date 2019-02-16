@@ -10,9 +10,9 @@
 
 1. (Potentially) dis-contiguous alignments of tokens for translation-alignment. (As with the tool http://ugarit.ialigner.com.)
 
-## Current version: 0.0.1
+## Current version: 0.1.0
 
-Status: very early development.  See [release notes](releases.md)
+Status: active development.  See [release notes](releases.md)
 
 ## License
 

@@ -159,7 +159,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   it should "list texts participating in a vector of alignments" in {
     val u:Vector[Cite2Urn] = Vector(
       Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1"),
-      Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:2"),
+      Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:2")
     )
     val lib:CiteLibrary = loadLibrary()
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
@@ -284,7 +284,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
         CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1"),
         CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.2"),
         CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3"),
-        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10"),
+        CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10")
       )
       val expected1:Vector[CtsUrn] = Vector(
         CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1-8.22.3"),
@@ -373,9 +373,45 @@ class CiteAlignmentManagerSpec extends FlatSpec {
     assert( als == expectedSet)
   }
 
-  it should "return a Vector[CtsUrn] for an alignment" in pending
+  it should "return a Vector[CtsUrn] for an alignment, with ranges expanded" in {
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val expectedSet = cam.getAlignments(Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1")).toSet
+    assert(expectedSet.size == 1)
+    val thisAlignment:CiteAlignment = expectedSet.head
+    val expectedVector:Vector[CtsUrn] = Vector(
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.3"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.4"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.5"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.4"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.5"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.6"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.7"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.8"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.9"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10"),
+      CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12")
+    )
+    val returnVec:Vector[CtsUrn] = cam.passagesForAlignment(thisAlignment)
+    assert( returnVec == expectedVector)
+  }
 
-  it should "return a Corpus for a vector of alignments" in pending
+  it should "return a Corpus for a vector of alignments" in {
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val expectedSet = cam.getAlignments(Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1")).toSet
+    assert(expectedSet.size == 1)
+    val thisAlignment:CiteAlignment = expectedSet.head
+    val testCorp:edu.holycross.shot.ohco2.Corpus = cam.corpusForAlignment(thisAlignment.urn)
+    assert(testCorp.size == 18)
+    assert(testCorp.contents.mkString(" ").size == 117)
+  }
 
   it should "export a corpus and alignments as CEX" in pending
 

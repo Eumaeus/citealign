@@ -102,7 +102,7 @@ import scala.scalajs.js.annotation._
 		}
 	} 
 
-	/** Returns all aligments as CiteObjects
+	/** Returns an aligments as CiteObjects
 	* @param urn filter
 	**/
 	def alignments(u:Cite2Urn):Vector[CiteObject] = {
@@ -346,6 +346,90 @@ import scala.scalajs.js.annotation._
 			alignmentsForText(u).toVector
 		}).flatten.toSet
 	}
+
+	/** Returns CtsUrns to passages aligned in an alignment.
+	* 	Ranges and containing-elements are expanded if there
+	*   is a text-repo present
+	*   @param au Cits2Urn
+	**/
+	def passagesForAlignment(au:Cite2Urn):Vector[CtsUrn] = {
+		val ai:Vector[CiteAlignment] = getAlignments(au)
+		val vvu:Vector[CtsUrn] = ai.map( a => {
+			passagesForAlignment(a)
+		}).flatten
+		val sorted:Vector[CtsUrn] = sortPassages(vvu)
+		sorted
+	}
+
+	/** Returns CtsUrns to passages aligned in an alignment.
+	* 	Ranges and containing-elements are expanded if there
+	*   is a text-repo present
+	*   @param al CiteAlignment
+	**/
+	def passagesForAlignment(al:CiteAlignment):Vector[CtsUrn] = {
+		if (isValid) {
+			val passages:Vector[CtsUrn] = al.passages
+			textRepo match {
+				case Some(tr) => {
+					val expandedPassages:Vector[CtsUrn] = {
+						passages.map( p => {
+							tr.corpus.validReff(p)
+						}).flatten
+					}
+					expandedPassages
+				}
+				case None => passages
+			}
+		} else {
+			Vector[CtsUrn]()	
+		}
+	}
+	
+	/** Returns a Corpus containing passages of text
+	*   containing all aligned passages in an alignment. If @expand is true returns the containing elements of all aligned passages.
+	* @param urn Cite2Urn the alignment
+	* @param expand Boolean include complete containing elements; defaults to false.
+	**/
+	def corpusForAlignment(urn:Cite2Urn, expand:Boolean = false):Corpus = {
+		if (isValid) {
+			textRepo match {
+				case Some(tr) => {
+					println("got here")
+					val textUrns:Vector[CtsUrn] = passagesForAlignment(urn)
+					val versions:Vector[CtsUrn] = textUrns.map(_.dropPassage).distinct
+					println(s"${versions}")
+					val rangeUrns:Vector[CtsUrn] = versions.map( v => {
+						val oneVersion:Vector[CtsUrn] = textUrns.filter(_ ~~ v)
+						val startU:CtsUrn = {
+							if (expand) oneVersion.head.collapsePassageBy(1) else oneVersion.head
+						}
+						val endU:CtsUrn = {
+							if (expand) oneVersion.last.collapsePassageBy(1) else oneVersion.last
+						}
+						val rangeU:CtsUrn = {
+							if (startU == endU) startU
+							else {
+								val rangeEnd:String = endU.passageComponent
+								CtsUrn(s"${startU}-${rangeEnd}")
+							}
+						}	
+						val expanded:Vector[CtsUrn] = tr.corpus.validReff(rangeU)
+						expanded
+					}).flatten
+					println(s"${rangeUrns}")
+					val alignedCorpus:Corpus = tr.corpus ~~ rangeUrns
+					println(s"${alignedCorpus}")
+					alignedCorpus
+				}
+				case None => {
+					Corpus(Vector[CitableNode]())
+				}
+			} 
+		} else {
+			Corpus(Vector[CitableNode]())
+		}
+	}
+
 
 	/** Returns Cite2Urns representing alignments for a passage
 	*   @param urn CtsUrn
