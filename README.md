@@ -6,9 +6,13 @@
 
 ## Use Cases
 
-1. Given a passage of a poem in the original language of composition, find passages of prose translations that align with it.
+1. Given a passage (a line, a range of lines, a book) of a poem in the original language of composition, find passages of prose translations that align with it. Do so even if the translation's scheme of citation is radically different (*e.g.* a prose translation of a poem).
 
 1. (Potentially) dis-contiguous alignments of tokens for translation-alignment. (As with the tool http://ugarit.ialigner.com.)
+
+## Overview
+
+This library simply organizes and creates methods for compositions of the basic primitive data-types modeled by the [CITE Architecture](http://cite-architecture.org): texts, collections, and relations. There can be a Collection of "alignment-objects". Each of these is citable with a [Cite2 URN](http://cite-architecture.org/cite2urn/). Passages of text, or textual tokens, are part of [OHCO2 Texts](http://cite-architecture.org/ohco2/), and are citable with [CTS URNs](http://cite-architecture.org/ctsurn/). Text and Relation-objects are associated with [CITE Relations](https://cite-architecture.github.io/citerelations/).
 
 ## Current version: 0.1.0
 
