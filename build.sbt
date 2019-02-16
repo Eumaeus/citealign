@@ -5,17 +5,17 @@ scalaVersion := (crossScalaVersions in ThisBuild).value.last
 
 // shadow sbt-scalajs' crossProject and CrossType from Scala.js 0.6.x
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-/*
+
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
     settings(
       publish := {},
       publishLocal := {}
     )
-*/
 
-lazy val crossed = crossProject(JSPlatform, JVMPlatform).in(file(".")).
-    settings(
+
+lazy val crossed = crossProject(JSPlatform, JVMPlatform).in(file("."))
+    .settings(
       name := "citealign",
       organization := "edu.furman.classics",
       version := "0.1.0",
@@ -41,9 +41,9 @@ lazy val crossed = crossProject(JSPlatform, JVMPlatform).in(file(".")).
     jsSettings(
       skip in packageJSDependencies := false,
       scalaJSUseMainModuleInitializer in Compile := true
-
-
     )
+
+
 
 lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
 lazy val crossedJS = crossed.js
