@@ -14,7 +14,7 @@
 
 This library simply organizes and creates methods for compositions of the basic primitive data-types modeled by the [CITE Architecture](http://cite-architecture.org): texts, collections, and relations. There can be a Collection of "alignment-objects". Each of these is citable with a [Cite2 URN](http://cite-architecture.org/cite2urn/). Passages of text, or textual tokens, are part of [OHCO2 Texts](http://cite-architecture.org/ohco2/), and are citable with [CTS URNs](http://cite-architecture.org/ctsurn/). Text and Relation-objects are associated with [CITE Relations](https://cite-architecture.github.io/citerelations/).
 
-## Current version: 0.1.0
+## Current version: 0.2.0
 
 Status: active development.  See [release notes](releases.md)
 

@@ -405,12 +405,21 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   it should "return a Corpus for a vector of alignments" in {
     val lib:CiteLibrary = loadLibrary()
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
-    val expectedSet = cam.getAlignments(Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1")).toSet
-    assert(expectedSet.size == 1)
-    val thisAlignment:CiteAlignment = expectedSet.head
-    val testCorp:edu.holycross.shot.ohco2.Corpus = cam.corpusForAlignment(thisAlignment.urn)
-    assert(testCorp.size == 18)
-    assert(testCorp.contents.mkString(" ").size == 117)
+    val alignVec:Vector[Cite2Urn] =Vector(Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1"),Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:2"))
+    val testCorp:edu.holycross.shot.ohco2.Corpus = cam.corpusForAlignments(alignVec)
+    assert(testCorp.size == 15 + 5)
+    assert((testCorp ~~ CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc:")).nodes(0).urn == CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0"))
+    assert((testCorp ~~ CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng:")).last.urn == CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12"))
+  }
+
+  it should "return a Corpus for a vector of alignments, expanded to the containing element" in {
+    val lib:CiteLibrary = loadLibrary()
+    val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
+    val alignVec:Vector[Cite2Urn] =Vector(Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:1"),Cite2Urn("urn:cite2:fufolio:hdtAlign.blackwell:2"))
+    val testCorp:edu.holycross.shot.ohco2.Corpus = cam.corpusForAlignments(alignVec, true)
+    assert(testCorp.size == 62)
+    assert((testCorp ~~ CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc:")).nodes(0).urn == CtsUrn("urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0"))
+    assert((testCorp ~~ CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng:")).last.urn == CtsUrn("urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.36"))
   }
 
   it should "export a corpus and alignments as CEX" in pending

@@ -430,6 +430,25 @@ import scala.scalajs.js.annotation._
 		}
 	}
 
+	/** Returns a Corpus containing passages of text
+	*   containing all aligned passages in an alignment. If @expand is true returns the containing elements of all aligned passages.
+	* @param urnVec Vector[Cite2Urn] the alignments
+	* @param expand Boolean include complete containing elements; defaults to false.
+	**/
+
+	def corpusForAlignments(urnVec:Vector[Cite2Urn], expand:Boolean = false):Corpus = {
+			val vCNs:Vector[CitableNode] = urnVec.map( u => corpusForAlignment(u,expand)).map(_.nodes).flatten
+			val sortedCNs:Vector[CitableNode] = {
+				val urnSet:Set[CtsUrn] = vCNs.map(_.urn).toSet
+				val sortedUrns:Vector[CtsUrn] = sortPassages(urnSet)
+				sortedUrns.map( u => {
+					val psg:String = vCNs.find(_.urn == u).get.text
+					CitableNode(u,psg)
+				})
+			}
+			Corpus(sortedCNs)
+	}
+
 
 	/** Returns Cite2Urns representing alignments for a passage
 	*   @param urn CtsUrn
