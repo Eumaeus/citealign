@@ -394,10 +394,8 @@ import scala.scalajs.js.annotation._
 		if (isValid) {
 			textRepo match {
 				case Some(tr) => {
-					println("got here")
 					val textUrns:Vector[CtsUrn] = passagesForAlignment(urn)
 					val versions:Vector[CtsUrn] = textUrns.map(_.dropPassage).distinct
-					println(s"${versions}")
 					val rangeUrns:Vector[CtsUrn] = versions.map( v => {
 						val oneVersion:Vector[CtsUrn] = textUrns.filter(_ ~~ v)
 						val startU:CtsUrn = {
@@ -416,9 +414,7 @@ import scala.scalajs.js.annotation._
 						val expanded:Vector[CtsUrn] = tr.corpus.validReff(rangeU)
 						expanded
 					}).flatten
-					println(s"${rangeUrns}")
 					val alignedCorpus:Corpus = tr.corpus ~~ rangeUrns
-					println(s"${alignedCorpus}")
 					alignedCorpus
 				}
 				case None => {

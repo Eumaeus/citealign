@@ -21,5 +21,4 @@ import scala.scalajs.js.annotation._
   ) {
 
 
-
 }
