@@ -54,7 +54,7 @@ class CiteAlignmentManagerSpec extends FlatSpec {
   }
 
   it should "fail to buld gracefully if the datamodel is not defined in the library" in {
-    val badCex:String = removeLinesFromCex(goodCex,Vector(11, 12))
+    val badCex:String = removeLinesFromCex(goodCex,Vector(11, 12, 13))
     val lib:CiteLibrary = loadLibrary(badCex)
     val cam:CiteAlignmentManager = CiteAlignmentManager(lib)
     assert(cam.isValid == false)
@@ -456,6 +456,7 @@ license#CC Share Alike.  For details, see more info.
 Collection#Model#Label#Description
 urn:cite2:fufolio:hdtAlign.blackwell:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
 urn:cite2:fufolio:iliadAlign.blackwell:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
+urn:cite2:fufolio:noItems.blackwell:#urn:cite2:cite:datamodels.v1:alignment#Text Alignment Model#The CITE model for text alignment. See documentation at <https://eumaeus.github.io/citealign/>.
 
 #!citecollections
 URN#Description#Labelling property#Ordering property#License
@@ -481,6 +482,14 @@ urn:cite2:fufolio:iliadAlign.blackwell.label:#Label#String#
 urn:cite2:fufolio:iliadAlign.blackwell.description:#Description#String#
 urn:cite2:fufolio:iliadAlign.blackwell.editor:#Editor#String#
 urn:cite2:fufolio:iliadAlign.blackwell.date:#Date#String#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:fufolio:noItems.blackwell.urn:#Alignment Record#Cite2Urn#
+urn:cite2:fufolio:noItems.blackwell.label:#Label#String#
+urn:cite2:fufolio:noItems.blackwell.description:#Description#String#
+urn:cite2:fufolio:noItems.blackwell.editor:#Editor#String#
+urn:cite2:fufolio:noItems.blackwell.date:#Date#String#
 
 #!citedata
 urn#label#description#editor#date

@@ -86,7 +86,14 @@ import scala.scalajs.js.annotation._
 	/** Returns Collections that implement the Alignment Data Model
 	*
 	**/
-	val alignmentCollections:Vector[Cite2Urn] = collections
+	val alignmentCollections:Vector[Cite2Urn] = collections.filter( c => {
+		relations match {
+			case Some(rs) => {
+			 rs.relations.filter(_.urn1.asInstanceOf[Cite2Urn].dropSelector == c).size > 0
+			}
+			case None => false
+		}
+	})
 
 	/** Returns all aligments as CiteObjects
 	* 
@@ -94,7 +101,7 @@ import scala.scalajs.js.annotation._
 	def alignments():Vector[CiteObject] = {
 		collRepo match {
 			case Some(cr) => {
-				collections.map(c => {
+				alignmentCollections.map(c => {
 					cr.objectsForCollection(c)
 				}).flatten	
 			}
@@ -108,7 +115,7 @@ import scala.scalajs.js.annotation._
 	def alignments(u:Cite2Urn):Vector[CiteObject] = {
 		collRepo match {
 			case Some(cr) => {
-				collections.map(c => {
+				alignmentCollections.map(c => {
 					cr.objectsForCollection(c).filter(_.urn ~~ u)
 				}).flatten	
 			}
@@ -284,10 +291,16 @@ import scala.scalajs.js.annotation._
 			textRepo match {
 				case Some(tr) => {
 					val trc = tr.corpus
-					// expand any ranges
+					// expand any ranges or containing elements
 					val pv:Vector[CtsUrn] = urns.toVector.map(u => trc.validReff(u)).flatten
 					// group by text
 					val pm:Vector[(CtsUrn,Vector[CtsUrn])] = pv.groupBy(_.dropPassage).toVector
+					/* workVec returns…
+						A Vector of…
+							A vector of…
+								A pair of CtsUrn, and that passage's index
+									(its place in its sequence)
+					*/
 					val workVec:Vector[Vector[(CtsUrn,Int)]] = pm.map(work => {
 						val thisWorkUrns:Vector[(CtsUrn, Int)] = trc.urns.filter(_.dropPassage == work._1).zipWithIndex
 						val theseUrns:Vector[(CtsUrn, Int)] = work._2.map( wu => {

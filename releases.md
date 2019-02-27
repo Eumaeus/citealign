@@ -1,5 +1,7 @@
 # `citealign`: release notes
 
+**0.3.1**: Won't crash if there is a collection with no relations (like, it is defined but not populated).
+
 **0.3.0**: Removed irritating debug code.
 
 **0.2.0**: Added `corpusForAlignments(urnVec:Vector[Cite2Urn], expand:Boolean = false)`.

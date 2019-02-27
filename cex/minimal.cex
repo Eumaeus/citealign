@@ -86,6 +86,9 @@ urn:cite2:cite:datamodels.v1.urn:#Data model#Cite2Urn#
 urn:cite2:cite:datamodels.v1.label:#Label#String#
 urn:cite2:cite:datamodels.v1.description:#Description#String#
 
+#!citedata
+urn#label#description
+urn:cite2:cite:datamodels.v1:alignment#text alignment model#Aligning passages of OHCO2 texts. See <https://eumaeus.github.io/citealign/>.
 
 #!ctscatalog
 urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online#lang
