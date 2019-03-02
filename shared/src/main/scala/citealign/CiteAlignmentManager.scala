@@ -5,7 +5,6 @@ import edu.holycross.shot.scm._
 import edu.holycross.shot.citeobj._
 import edu.holycross.shot.citerelation._
 import edu.holycross.shot.ohco2._
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
@@ -404,39 +403,7 @@ import scala.scalajs.js.annotation._
 	* @param expand Boolean include complete containing elements; defaults to false.
 	**/
 	def corpusForAlignment(urn:Cite2Urn, expand:Boolean = false):Corpus = {
-		if (isValid) {
-			textRepo match {
-				case Some(tr) => {
-					val textUrns:Vector[CtsUrn] = passagesForAlignment(urn)
-					val versions:Vector[CtsUrn] = textUrns.map(_.dropPassage).distinct
-					val rangeUrns:Vector[CtsUrn] = versions.map( v => {
-						val oneVersion:Vector[CtsUrn] = textUrns.filter(_ ~~ v)
-						val startU:CtsUrn = {
-							if (expand) oneVersion.head.collapsePassageBy(1) else oneVersion.head
-						}
-						val endU:CtsUrn = {
-							if (expand) oneVersion.last.collapsePassageBy(1) else oneVersion.last
-						}
-						val rangeU:CtsUrn = {
-							if (startU == endU) startU
-							else {
-								val rangeEnd:String = endU.passageComponent
-								CtsUrn(s"${startU}-${rangeEnd}")
-							}
-						}	
-						val expanded:Vector[CtsUrn] = tr.corpus.validReff(rangeU)
-						expanded
-					}).flatten
-					val alignedCorpus:Corpus = tr.corpus ~~ rangeUrns
-					alignedCorpus
-				}
-				case None => {
-					Corpus(Vector[CitableNode]())
-				}
-			} 
-		} else {
-			Corpus(Vector[CitableNode]())
-		}
+		corpusForAlignments(Vector(urn), expand)	
 	}
 
 	/** Returns a Corpus containing passages of text
@@ -446,16 +413,48 @@ import scala.scalajs.js.annotation._
 	**/
 
 	def corpusForAlignments(urnVec:Vector[Cite2Urn], expand:Boolean = false):Corpus = {
-			val vCNs:Vector[CitableNode] = urnVec.map( u => corpusForAlignment(u,expand)).map(_.nodes).flatten
-			val sortedCNs:Vector[CitableNode] = {
-				val urnSet:Set[CtsUrn] = vCNs.map(_.urn).toSet
-				val sortedUrns:Vector[CtsUrn] = sortPassages(urnSet)
-				sortedUrns.map( u => {
-					val psg:String = vCNs.find(_.urn == u).get.text
-					CitableNode(u,psg)
-				})
+		if (isValid) {
+			textRepo match {
+				case Some(tr) => {
+					// get all possible urns for alignments, once
+					val expandedUrns:Vector[CtsUrn] = urnVec.map( a => {
+						passagesForAlignment(a).map( p => tr.corpus.validReff(p) ).flatten
+					}).flatten
+					val groupedUrns:Vector[(CtsUrn,Vector[CtsUrn])] = expandedUrns.groupBy(_.dropPassage).toVector
+					// sort
+					val sortedUrns:Vector[(CtsUrn,Vector[CtsUrn])] = groupedUrns.map( grp =>{
+						val sortedVec:Vector[CtsUrn] = tr.corpus.sortPassages(grp._2)	
+						(grp._1, sortedVec)
+					})
+					val corpusUrns:Vector[CtsUrn] = sortedUrns.map( grp => {
+						if (expand) {
+							val firstU:CtsUrn = grp._2.head.collapsePassageBy(1)
+							val lastU:CtsUrn = grp._2.last.collapsePassageBy(1)
+							val corpusUrn:CtsUrn = {
+								if (firstU == lastU) firstU
+								else CtsUrn(s"${firstU}-${lastU.passageComponent}")
+							}																
+							corpusUrn
+						} else {
+							val firstU:CtsUrn = grp._2.head
+							val lastU:CtsUrn = grp._2.last
+							val corpusUrn:CtsUrn = {
+								if (firstU == lastU) firstU
+								else CtsUrn(s"${firstU}-${lastU.passageComponent}")
+							}																
+							corpusUrn
+						}
+					})
+					val corpora:Vector[CitableNode] = corpusUrns.map( cu => {
+						val corp:Corpus = tr.corpus >= cu
+						corp.nodes
+					}).flatten
+					Corpus(corpora)
+				}
+				case None => Corpus(Vector[CitableNode]())
 			}
-			Corpus(sortedCNs)
+		} else { Corpus(Vector[CitableNode]()) }
+
 	}
 
 
