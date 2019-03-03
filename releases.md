@@ -1,6 +1,8 @@
 # `citealign`: release notes
 
-**0.3.1**: Dramatic speedup of `corpusForAlignments`.
+**0.4.1**: Dramatic speedup of `getAlignments`.
+
+**0.4.0**: Dramatic speedup of `corpusForAlignments`.
 
 **0.3.1**: Won't crash if there is a collection with no relations (like, it is defined but not populated).
 

@@ -479,9 +479,10 @@ import scala.scalajs.js.annotation._
 							}
 						}).map(_.urn1.asInstanceOf[Cite2Urn]).toVector
 						alignmentUrns
-					}).flatten
+					}).flatten.distinct
 					//println(s"""\n\nvec: ${treatExpandedUrns.mkString("\n")}\n""")
 					val alignmentVec:Vector[CiteAlignment] = getAlignments(treatExpandedUrns)
+					//println("back from getAlignments")
 					alignmentVec.toSet
 				}	
 				case None => Set[CiteAlignment]()

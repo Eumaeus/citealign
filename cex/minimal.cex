@@ -48,13 +48,13 @@ urn:cite2:fufolio:iliadAlign.blackwell:6#Iliad 4#Iliad Alignment 4#cwb#2/12/2019
 
 #!relations
 // Hdt.
-urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0-8.22.5
-urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3-8.22.10
-urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1
-urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6-8.22.7
-urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.0
-urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.2
-urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12
+urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.0-8.22.5
+urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.3-8.22.10
+urn:cite2:fufolio:hdtAlign.blackwell:1#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.1
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.6-8.22.7
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.0
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.2
+urn:cite2:fufolio:hdtAlign.blackwell:2#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.12
 // Iliad greek - pope
 urn:cite2:fufolio:iliadAlign.blackwell:3#urn:cite2:cite:verbs.v1:aligns#urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.1-1.2
 urn:cite2:fufolio:iliadAlign.blackwell:3#urn:cite2:cite:verbs.v1:aligns#urn:cts:fufolio:pope.iliad.fu2019:1.1.1-1.1.2
@@ -92,76 +92,76 @@ urn:cite2:cite:datamodels.v1:alignment#text alignment model#Aligning passages of
 
 #!ctscatalog
 urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online#lang
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:#book/section/token#Herodotus#Histories#Greek, Godley, ed.#tokenized#true#grc
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:#book/section/token#Herodotus#Histories#English, trans. Godley#tokenized, no punctuation#true#eng
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:#book/section/token#Herodotus#Histories#Tokenized Greek, Godley, ed.##true#grc
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:#book/section/token#Herodotus#Histories#Tokenized English, trans. Godley##true#eng
 urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:#book/line#Homeric Epic#Iliad#Greek. Allen, ed. Perseus Digital Library. Creative Commons Attribution 3.0 License##true#grc
 urn:cts:fufolio:pope.iliad.fu2019:#book, stanza, line#Alexander Pope#Iliad#Furman Ed. 2019##true#eng
 
 #!ctsdata
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.0#Ἀθηναίων
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.1#δὲ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.2#νέας
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.3#τὰς
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.4#ἄριστα
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.5#πλεούσας
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.6#ἐπιλεξάμενος
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.7#Θεμιστοκλέης
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.8#ἐπορεύετο
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.9#περὶ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.10#τὰ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.11#πότιμα
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.12#ὕδατα
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.14#ἐντάμνων
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.15#ἐν
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.16#τοῖσι
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.17#λίθοισι
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.18#γράμματα
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.20#τὰ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.21#Ἴωνες
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.22#ἐπελθόντες
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.23#τῇ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.24#ὑστεραίῃ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.25#ἡμέρῃ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.26#ἐπὶ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.27#τὸ
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.28#Ἀρτεμίσιον
-urn:cts:greekLit:tlg0016.tlg001.grc.tokens:8.22.29#ἐπελέξαντο
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.0#Ἀθηναίων
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.1#δὲ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.2#νέας
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.3#τὰς
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.4#ἄριστα
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.5#πλεούσας
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.6#ἐπιλεξάμενος
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.7#Θεμιστοκλέης
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.8#ἐπορεύετο
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.9#περὶ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.10#τὰ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.11#πότιμα
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.12#ὕδατα
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.14#ἐντάμνων
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.15#ἐν
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.16#τοῖσι
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.17#λίθοισι
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.18#γράμματα
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.20#τὰ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.21#Ἴωνες
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.22#ἐπελθόντες
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.23#τῇ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.24#ὑστεραίῃ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.25#ἡμέρῃ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.26#ἐπὶ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.27#τὸ
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.28#Ἀρτεμίσιον
+urn:cts:greekLit:tlg0016.tlg001.grc_tokens:8.22.29#ἐπελέξαντο
 
 #!ctsdata
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.0#Themistocles
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.1#however
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.2#selected
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.3#those
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.4#ships
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.5#of
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.6#the
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.7#Athenians
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.8#which
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.9#sailed
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.10#best
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.12#and
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.13#went
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.14#round
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.15#to
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.16#the
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.17#springs
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.18#of
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.19#drinking-water
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.21#cutting
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.22#inscriptions
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.23#on
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.24#the
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.25#stones
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.26#there
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.28#which
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.29#the
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.30#Ionians
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.31#read
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.32#when
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.33#they
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.34#came
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.35#to
-urn:cts:greekLit:tlg0016.tlg001.eng.tokens:8.22.36#Artemision
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.0#Themistocles
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.1#however
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.2#selected
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.3#those
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.4#ships
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.5#of
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.6#the
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.7#Athenians
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.8#which
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.9#sailed
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.10#best
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.12#and
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.13#went
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.14#round
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.15#to
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.16#the
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.17#springs
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.18#of
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.19#drinking-water
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.21#cutting
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.22#inscriptions
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.23#on
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.24#the
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.25#stones
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.26#there
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.28#which
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.29#the
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.30#Ionians
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.31#read
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.32#when
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.33#they
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.34#came
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.35#to
+urn:cts:greekLit:tlg0016.tlg001.eng_tokens:8.22.36#Artemision
 
 #!ctsdata
 // Allen Iliad
