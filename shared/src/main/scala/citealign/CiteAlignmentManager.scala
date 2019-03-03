@@ -256,28 +256,9 @@ import scala.scalajs.js.annotation._
 	*   @param passageSet Set[CtsUrn]
 	**/
 	def sortPassages(passageSet:Set[CtsUrn]):Vector[CtsUrn] = {
-		if (isValid) {
-			textRepo match {
-				case Some(tr) => {
-					val trc = tr.corpus
-					val pv:Vector[CtsUrn] = passageSet.toVector.map(u => trc.validReff(u)).flatten
-					val pm:Vector[(CtsUrn,Vector[CtsUrn])] = pv.groupBy(_.dropPassage).toVector
-					val workVec:Vector[CtsUrn] = pm.map(work => {
-						val thisWorkUrns:Vector[(CtsUrn, Int)] = trc.urns.filter(_.dropPassage == work._1).zipWithIndex
-						val theseUrns:Vector[(CtsUrn, Int)] = work._2.map( wu => {
-							var thisIndex:Int = thisWorkUrns.find(_._1 == wu).get._2
-							(wu, thisIndex)
-						})
-						theseUrns.sortBy(_._2).map(_._1)
-					}).flatten
-					workVec
-				}
-				case None => {
-					Vector[CtsUrn]()
-				}
-			}	
-		} else {
-			Vector[CtsUrn]()
+		textRepo match {
+			case Some(tr) => tr.corpus.sortPassages(passageSet)
+			case None => Vector[CtsUrn]()
 		}
 	}
 

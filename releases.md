@@ -1,5 +1,7 @@
 # `citealign`: release notes
 
+**0.5.0**: Using OHCO2 10.12.3.
+
 **0.4.1**: Dramatic speedup of `getAlignments`.
 
 **0.4.0**: Dramatic speedup of `corpusForAlignments`.
